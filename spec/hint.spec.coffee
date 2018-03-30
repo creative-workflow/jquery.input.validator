@@ -67,3 +67,21 @@ describe 'jquery.input.validator', ->
         expect($label.length).toBe 1
         expect($label.text()).toBe 'hint text'
       )
+
+    it 'changes the message', ->
+      elements = '<div>'
+      elements+= '<input type="email" minlength="3" value="ab">'
+      elements+= '</div>'
+      appendAndCallback(elements, ($elements) ->
+        $element = $('input', $elements).first()
+
+        validator.validateElement($element)
+
+        $label = $(".#{validator.config.classes.hint}", $elements)
+        expect($label.text()).toBe validator.config.messages.minlength
+
+
+        $element.val('not mor minlength')
+        validator.validateElement($element)
+        expect($label.text()).toBe validator.config.messages.email
+      )
