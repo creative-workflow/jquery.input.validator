@@ -134,7 +134,7 @@ It also exposes the class `InputValidator` for manual instantiating.
 
 
 ### Dependencies
-  * [jquery](https://jquery.com)
+  * [jquery](https://jquery.com) (>=v1.1, >=2, >=3 (+slim))
 
 ### Resources
   * https://github.com/creative-workflow/jquery.input.validator
@@ -149,7 +149,9 @@ It also exposes the class `InputValidator` for manual instantiating.
   * `npm run test`
 
 #### Run tests and linter
+  * `npm run lint`
   * `npm run test`
+  * `npm run test-all-jquery-versions`
 
 #### Generate build
   * `npm run build`
@@ -162,6 +164,7 @@ It also exposes the class `InputValidator` for manual instantiating.
 ### WIP: 1.0.3
   * refactor `onBuildErrorHint`
   * clear input events
+  * add tests for jquery>=1.10, >=2, >=3 (+slim version)
 
 ### 1.0.2
   * fix error hint

@@ -30,12 +30,36 @@ module.exports = (grunt) ->
       build:
         files: 'dist/jquery.input.validator.min.js': 'dist/jquery.input.validator.js'
     jasmine:
-      specs:
+      jquery1:
         src: 'dist/jquery.input.validator.js'
         options:
           specs: 'tmp/spec/*spec.js'
           vendor: [
-            "bower_components/jquery/dist/jquery.min.js"
+            "bower_components/jquery-1/jquery.min.js"
+            "bower_components/jasmine-jquery-legacy/lib/jasmine-jquery.js"
+          ]
+      jquery2:
+        src: 'dist/jquery.input.validator.js'
+        options:
+          specs: 'tmp/spec/*spec.js'
+          vendor: [
+            "bower_components/jquery-2/dist/jquery.min.js"
+            "bower_components/jasmine-jquery/lib/jasmine-jquery.js"
+          ]
+      jquery3:
+        src: 'dist/jquery.input.validator.js'
+        options:
+          specs: 'tmp/spec/*spec.js'
+          vendor: [
+            "bower_components/jquery-3/dist/jquery.min.js"
+            "bower_components/jasmine-jquery/lib/jasmine-jquery.js"
+          ]
+      jquery3Slim:
+        src: 'dist/jquery.input.validator.js'
+        options:
+          specs: 'tmp/spec/*spec.js'
+          vendor: [
+            "bower_components/jquery-3/dist/jquery.slim.min.js"
             "bower_components/jasmine-jquery/lib/jasmine-jquery.js"
           ]
     watch:
@@ -56,7 +80,18 @@ module.exports = (grunt) ->
     'uglify'
   ]
 
+  grunt.registerTask 'lint', [
+    'includes'
+    'coffeelint'
+  ]
+
   grunt.registerTask 'test', [
+    'includes'
+    'coffee'
+    'jasmine:jquery3'
+  ]
+  
+  grunt.registerTask 'test_all', [
     'includes'
     'coffee'
     'jasmine'
