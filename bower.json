@@ -1,0 +1,29 @@
+{
+  "name": "jquery.input.validator",
+  "version": "1.0.0",
+  "homepage": "https://github.com/creative-workflow/jquery.input.validator",
+  "authors": [
+    "Tom Hanoldt <tom@creative-workflow.berlin>"
+  ],
+  "description": "This module helps to handle independent input validation based on standart html attributes.",
+  "main": "src/jquery.input.validator.coffee",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "jquery",
+    "validation"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "node_modules",
+    "bower_components",
+    "spec"
+  ],
+  "devDependencies": {
+    "jasmine-jquery": ">=2.1.0"
+  },
+  "dependencies": {
+    "jquery": ">=1.7.0"
+  }
+}
