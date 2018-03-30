@@ -18,7 +18,10 @@
     "grunt-contrib-jasmine": "^1.1.0",
     "grunt-contrib-uglify": "^3.0.1",
     "grunt-contrib-watch": "^1.0.0",
+    "grunt-exec": "^3.0.0",
     "grunt-includes": "^1.0.0",
+    "grunt-replace": "^1.0.1",
+    "grunt-simple-git": "^1.0.1",
     "jasmine-jquery": "^2.1.1"
   },
   "dependencies": {
@@ -28,8 +31,9 @@
   "scripts": {
     "test": "grunt test",
     "lint": "grunt lint",
-    "test-all-jquery-versions": "grunt test_all",
-    "build": "grunt"
+    "test-all-jquery-versions": "grunt test-all",
+    "build": "grunt build",
+    "release": "grunt release"
   },
   "keywords": [
     "jquery-plugin",

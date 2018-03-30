@@ -6,4 +6,4 @@ before_script:
   - npm install -g grunt-cli bower
   - bower install
 
-script: grunt test-all-jquery-versions --verbose
+script: grunt build --verbose
