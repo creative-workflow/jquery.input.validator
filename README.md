@@ -161,7 +161,7 @@ It also exposes the class `InputValidator` for manual instantiating.
   [Tom Hanoldt](https://www.tomhanoldt.info)
 
 ## Changelog
-### WIP: 1.0.3
+### 1.0.3
   * refactor `onBuildErrorHint`
   * clear input events before attaching
   * add tests for jquery>=1.10, >=2, >=3 (+slim version)
