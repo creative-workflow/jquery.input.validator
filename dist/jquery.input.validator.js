@@ -155,6 +155,7 @@
       this.prepareElements = bind(this.prepareElements, this);
       this.init = bind(this.init, this);
       this.config = this.constructor.config;
+      this.ns = 'inputvalidator';
       this.init(config);
     }
 
@@ -170,31 +171,30 @@
     };
 
     InputValidator.prototype.prepareElements = function(context) {
-      var $elements, ns;
+      var $elements;
       if (context == null) {
         context = null;
       }
       if (context == null) {
         context = this.context;
       }
-      ns = 'inputvalidator';
       $elements = this.elementsFor(context);
       if (this.config.validateOnFocusOut) {
-        $elements.off("focusout." + ns).on("focusout." + ns, (function(_this) {
+        $elements.off("focusout." + this.ns).on("focusout." + this.ns, (function(_this) {
           return function(e) {
             return _this.validateElement(e.target);
           };
         })(this));
       }
       if (this.config.removeHintOnFocus) {
-        $elements.off("focus." + ns).on("focus." + ns, (function(_this) {
+        $elements.off("focus." + this.ns).on("focus." + this.ns, (function(_this) {
           return function(e) {
             return _this.resetElement(e.target);
           };
         })(this));
       }
       if (this.config.validateOnKeyUp) {
-        $elements.off("keyup." + ns).on("keyup." + ns, (function(_this) {
+        $elements.off("keyup." + this.ns).on("keyup." + this.ns, (function(_this) {
           return function(e) {
             if ($(e.target).data('invalid')) {
               return _this.validateElement(e.target);
@@ -203,7 +203,7 @@
         })(this));
       }
       if (this.config.validateOnClick) {
-        return $elements.off("click." + ns).on("click." + ns, (function(_this) {
+        return $elements.off("click." + this.ns).on("click." + this.ns, (function(_this) {
           return function(e) {
             return _this.validateElement(e.target);
           };
