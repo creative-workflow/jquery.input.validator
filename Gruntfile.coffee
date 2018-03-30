@@ -128,15 +128,7 @@ module.exports = (grunt) ->
             "bower_components/jquery-3/dist/jquery.min.js"
             "bower_components/jasmine-jquery/lib/jasmine-jquery.js"
           ]
-      jquery3Slim:
-        specs:   'build/spec/*spec.js'
-        helpers: 'build/spec/*helper.js'
-        options:
-          specs: 'build/spec/*spec.js'
-          vendor: [
-            "bower_components/jquery-3/dist/jquery.slim.min.js"
-            "bower_components/jasmine-jquery/lib/jasmine-jquery.js"
-          ]
+      
     watch:
       options: livereload: true
       files: '{src,spec}/*.coffee'
