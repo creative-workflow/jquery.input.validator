@@ -2,7 +2,7 @@
 
 [![NPM](https://nodei.co/npm/jquery.input.validator.png)](https://nodei.co/npm/jquery.input.validator/)
 
-This module helps to handle input validation based on standart html attributes.
+This module helps to handle input validation based on standard html attributes.
 
 It is inspired by [jquery-validation](https://jqueryvalidation.org/) but has much less complexity, more comfort and is easy adjustable for complex setups.
 
