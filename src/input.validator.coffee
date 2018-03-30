@@ -119,8 +119,9 @@ class @InputValidator
         validator.config.handler.onValid?(validator, $element, value, errors)
 
   constructor: (@context, config={}) ->
-    @config = @constructor.config
-    @ns     = 'inputvalidator'
+    @config  = @constructor.config
+    @ns      = 'inputvalidator'
+    @version = '__VERSION__'
     @init(config)
 
   init: (config, context=null) =>
@@ -130,7 +131,7 @@ class @InputValidator
 
   prepareElements: (context=null) =>
     context ?= @context
-    
+
     $elements = @elementsFor(context)
     if @config.validateOnFocusOut
       $elements
