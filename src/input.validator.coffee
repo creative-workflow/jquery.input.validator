@@ -120,6 +120,7 @@ class @InputValidator
 
   constructor: (@context, config={}) ->
     @config = @constructor.config
+    @ns     = 'inputvalidator'
     @init(config)
 
   init: (config, context=null) =>
@@ -129,24 +130,33 @@ class @InputValidator
 
   prepareElements: (context=null) =>
     context ?= @context
-
-    $elements = @elements(context)
+    
+    $elements = @elementsFor(context)
     if @config.validateOnFocusOut
-      $elements.focusout (e) => @validateElement(e.target)
+      $elements
+        .off("focusout.#{@ns}")
+        .on("focusout.#{@ns}", (e) => @validateElement(e.target))
 
     if @config.removeHintOnFocus
-      $elements.focus (e) => @resetElement(e.target)
+      $elements
+        .off("focus.#{@ns}")
+        .on("focus.#{@ns}", (e) => @resetElement(e.target))
 
     if @config.validateOnKeyUp
-      $elements.keyup (e) =>
-        @validateElement(e.target) if $(e.target).data('invalid')
+      $elements
+        .off("keyup.#{@ns}")
+        .on("keyup.#{@ns}", (e) =>
+          @validateElement(e.target) if $(e.target).data('invalid')
+        )
 
     if @config.validateOnClick
-      $elements.click (e) => @validateElement(e.target)
+      $elements
+        .off("click.#{@ns}")
+        .on("click.#{@ns}", (e) => @validateElement(e.target))
 
   validate: (context = null) =>
     errors = []
-    $elements = @elements(context)
+    $elements = @elementsFor(context)
     for element in $elements.get()
       errors = errors.concat(@validateElement(element))
 
@@ -178,12 +188,12 @@ class @InputValidator
     errors
 
   reset: (context = null) =>
-    @resetElement(@elements(context))
+    @resetElement(@elementsFor(context))
 
   resetElement: ($element) =>
     @config.handler.onResetIntern(@, $element)
 
-  elements: (context = null) =>
+  elementsFor: (context = null) =>
     context ?= @context
     $(@config.selectors.elements, context)
       .not(@config.selectors.ignore)
