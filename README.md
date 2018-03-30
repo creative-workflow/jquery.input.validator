@@ -1,8 +1,12 @@
-# jquery.input.validator [![Build Status](https://travis-ci.org/creative-workflow/jquery.input.validator.svg?branch=master)](https://travis-ci.org/creative-workflow/jquery.input.validator) [![Code Climate](https://codeclimate.com/github/creative-workflow/jquery.input.validator/badges/gpa.svg)](https://codeclimate.com/github/creative-workflow/jquery.input.validator)
+# jquery.input.validator # jquery.formslider [![Build Status](https://travis-ci.org/creative-workflow/jquery.input.validator.svg?branch=master)](https://travis-ci.org/creative-workflow/jquery.input.validator) [![Contribute](https://img.shields.io/badge/Contribution-Open-brightgreen.svg)](CONTRIBUTING.md) [![Code Climate](https://codeclimate.com/github/creative-workflow/jquery.input.validator/badges/gpa.svg)](https://codeclimate.com/github/creative-workflow/jquery.input.validator) [![npm](https://img.shields.io/npm/dt/jquery.input.validator.svg)](https://www.npmjs.com/package/jquery.input.validator) [![Beerpay](https://beerpay.io/creative-workflow/jquery.input.validator/badge.svg?style=flat)](https://beerpay.io/creative-workflow/jquery.input.validator)
+
+[![NPM](https://nodei.co/npm/jquery.input.validator.png)](https://nodei.co/npm/jquery.input.validator/)
 
 This module helps to handle input validation based on standart html attributes.
 
-This plugin uses [jquery.debug](https://github.com/creative-workflow/jquery.debug) so all tracking information can be easily seen in the javascript console.
+It is inspired by [jquery-validation](https://jqueryvalidation.org/) but has much less complexity, more comfort and is easy adjustable for complex setups.
+
+_Note: early stage_
 
 ## Installation
 ```bash
@@ -167,3 +171,9 @@ It also exposes the class `InputValidator` for manual instantiating.
 # Contributing
 
 Check out the [Contributing Guidelines](CONTRIBUTING.md)
+
+
+## Support on Beerpay
+Hey dude! Help me out for a couple of :beers:!
+
+[![Beerpay](https://beerpay.io/creative-workflow/jquery.input.validator/badge.svg?style=beer)](https://beerpay.io/creative-workflow/jquery.input.validator)  [![Beerpay](https://beerpay.io/creative-workflow/jquery.input.validator/make-wish.svg?style=flat)](https://beerpay.io/creative-workflow/jquery.input.validator?focus=wish)
