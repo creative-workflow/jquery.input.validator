@@ -43,9 +43,11 @@ module.exports = (grunt) ->
           flatten: true
           src: [
             'bower.json'
+            'package.json'
           ]
           dest: './'
         }]
+
 
     includes:
       files:
@@ -155,8 +157,7 @@ module.exports = (grunt) ->
       console.error "\n\nERROR: missing argument '--tag' (--tag=1.x.x)\n\n"
       return
 
-    git_status = require('child_process').execSync('git status').toString();
-    #unless git_status.match(/working tree clean/)
+    git_status = require('child_process').execSync('git status').toString()
     if git_status.indexOf('working tree clean') == -1
       console.error "\n\nERROR: uncomitted changes, use 'git status'\n\n"
       return
@@ -165,4 +166,4 @@ module.exports = (grunt) ->
 
     grunt.config('pkg.version', grunt.option('tag'))
 
-    grunt.task.run([ 'build', 'git-push-dist', 'exec:npm_publish' ]);
+    grunt.task.run([ 'build' ]) #, 'git-push-dist', 'exec:npm_publish' ]);
