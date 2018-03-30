@@ -166,12 +166,12 @@ class @InputValidator
         }
 
     if errors.length > 0
-      $element.attr('invalid', true)
+      $element.data('invalid', true)
       @config.handler.onInvalidIntern(@, $element, value, errors)
       $element.first().focus() if @config.focusInvalidElement
 
     else
-      $element.attr('invalid', false)
+      $element.data('invalid', false)
       @config.handler.onValidIntern(@, $element, value, errors)
 
     errors

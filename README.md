@@ -26,8 +26,11 @@ validator = $('body').inputValidator({
   ...
 });
 
-$('form').inputValidator().validate()
+errors = $('form').inputValidator().validate()
 $('form').inputValidator().reset()
+
+errors = validator.validate($('form'))
+validator.reset($('form'))
 
 errors = validator.validateElement('<input type="email" value"invalid">')
 errors = validator.validateElement('<input type="number" value"invalid">')
@@ -167,7 +170,7 @@ It also exposes the class `InputValidator` for manual instantiating.
 ## Changelog
 ### 1.0.1
   * readme
-  
+
 ### 1.0.0
   * initial
 
