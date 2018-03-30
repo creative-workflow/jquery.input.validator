@@ -147,7 +147,7 @@
         config = {};
       }
       this.messageFor = bind(this.messageFor, this);
-      this.elements = bind(this.elements, this);
+      this.elementsFor = bind(this.elementsFor, this);
       this.resetElement = bind(this.resetElement, this);
       this.reset = bind(this.reset, this);
       this.validateElement = bind(this.validateElement, this);
@@ -170,30 +170,31 @@
     };
 
     InputValidator.prototype.prepareElements = function(context) {
-      var $elements;
+      var $elements, ns;
       if (context == null) {
         context = null;
       }
       if (context == null) {
         context = this.context;
       }
-      $elements = this.elements(context);
+      ns = 'inputvalidator';
+      $elements = this.elementsFor(context);
       if (this.config.validateOnFocusOut) {
-        $elements.focusout((function(_this) {
+        $elements.off("focusout." + ns).on("focusout." + ns, (function(_this) {
           return function(e) {
             return _this.validateElement(e.target);
           };
         })(this));
       }
       if (this.config.removeHintOnFocus) {
-        $elements.focus((function(_this) {
+        $elements.off("focus." + ns).on("focus." + ns, (function(_this) {
           return function(e) {
             return _this.resetElement(e.target);
           };
         })(this));
       }
       if (this.config.validateOnKeyUp) {
-        $elements.keyup((function(_this) {
+        $elements.off("keyup." + ns).on("keyup." + ns, (function(_this) {
           return function(e) {
             if ($(e.target).data('invalid')) {
               return _this.validateElement(e.target);
@@ -202,7 +203,7 @@
         })(this));
       }
       if (this.config.validateOnClick) {
-        return $elements.click((function(_this) {
+        return $elements.off("click." + ns).on("click." + ns, (function(_this) {
           return function(e) {
             return _this.validateElement(e.target);
           };
@@ -216,7 +217,7 @@
         context = null;
       }
       errors = [];
-      $elements = this.elements(context);
+      $elements = this.elementsFor(context);
       ref = $elements.get();
       for (i = 0, len = ref.length; i < len; i++) {
         element = ref[i];
@@ -259,14 +260,14 @@
       if (context == null) {
         context = null;
       }
-      return this.resetElement(this.elements(context));
+      return this.resetElement(this.elementsFor(context));
     };
 
     InputValidator.prototype.resetElement = function($element) {
       return this.config.handler.onResetIntern(this, $element);
     };
 
-    InputValidator.prototype.elements = function(context) {
+    InputValidator.prototype.elementsFor = function(context) {
       if (context == null) {
         context = null;
       }

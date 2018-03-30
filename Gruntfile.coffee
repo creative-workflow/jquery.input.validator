@@ -29,14 +29,6 @@ module.exports = (grunt) ->
         banner: '/*! <%= pkg.name %> v<%= pkg.version %> | <%= pkg.license %> */\n'
       build:
         files: 'dist/jquery.input.validator.min.js': 'dist/jquery.input.validator.js'
-    compress:
-      main:
-        options:
-          mode: 'gzip'
-        files: [ {
-          src: [ 'dist/jquery.input.validator.min.js' ]
-          dest: 'dist/jquery.input.validator.js.gz'
-        }]
     jasmine:
       specs:
         src: 'dist/jquery.input.validator.js'
@@ -62,7 +54,6 @@ module.exports = (grunt) ->
     'coffee'
     'jasmine'
     'uglify'
-    'compress'
   ]
 
   grunt.registerTask 'test', [
