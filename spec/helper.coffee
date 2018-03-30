@@ -1,5 +1,9 @@
 helper = jasmine.helper = jasmine.helper || {}
 
+helper.printJqueryVersion = ->
+  console.log "jQuery.version: #{$.fn.jquery} \n\n"
+
+helper.printJqueryVersion()
 
 helper.appendAndCallback = (content, callback) ->
   if typeof(content) != 'string'
