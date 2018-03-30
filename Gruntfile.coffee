@@ -5,24 +5,16 @@ module.exports = (grunt) ->
     pkg: grunt.file.readJSON 'package.json'
 
     git:
-      add:
-        options:
-          simple:
-            args: ['./dist']
+      add: ['add', './dist']
 
       commit:
         options:
           message: 'dist v<%= pkg.version %>'
 
-      push:
-        options:
-          simple:
-            args: ['master']
+      tag: ['tag', '-a', '<%= pkg.version %>', '-m', '<%= pkg.version %>']
 
-      tag:
-        options:
-          simple:
-            args: ['<%= pkg.version %>']
+      push: ['push', 'origin', 'master']
+
 
     replace:
       dist:
@@ -128,7 +120,7 @@ module.exports = (grunt) ->
             "bower_components/jquery-3/dist/jquery.min.js"
             "bower_components/jasmine-jquery/lib/jasmine-jquery.js"
           ]
-      
+
     watch:
       options: livereload: true
       files: '{src,spec}/*.coffee'
