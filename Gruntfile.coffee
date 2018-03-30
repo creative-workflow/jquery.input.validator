@@ -5,13 +5,14 @@ module.exports = (grunt) ->
     pkg: grunt.file.readJSON 'package.json'
 
     git:
-      add: ['add', './dist']
+      add: ['add', '.']
 
       commit:
         options:
           message: 'dist v<%= pkg.version %>'
 
-      tag: ['tag', '-a', '<%= pkg.version %>', '-m', '<%= pkg.version %>']
+      createTag: ['tag', '-a', '<%= pkg.version %>', '-m', '<%= pkg.version %>']
+      pushTag: ['push', 'origin', 'master', 'tag', '<%= pkg.version %>']
 
       push: ['push', 'origin', 'master']
 
@@ -124,25 +125,44 @@ module.exports = (grunt) ->
     watch:
       options: livereload: true
       files: '{src,spec}/*.coffee'
-      tasks: 'default'
+      tasks: 'test'
+
+
 
   # Loading dependencies
   for key of grunt.file.readJSON('package.json').devDependencies
     if key != 'grunt' and key.indexOf('grunt') == 0
       grunt.loadNpmTasks key
 
-  grunt.registerTask 'code', [ 'clean', 'includes', 'coffee', 'replace:dist', 'replace:bower' ]
+  grunt.registerTask 'compile', [ 'clean', 'includes', 'coffee', 'replace:dist', 'replace:bower' ]
 
   grunt.registerTask 'lint', [ 'includes', 'coffeelint' ]
 
-  grunt.registerTask 'test',     [ 'code', 'jasmine:jquery3' ]
-  grunt.registerTask 'test-all', [ 'code', 'jasmine'         ]
+  grunt.registerTask 'test',     [ 'compile', 'jasmine:jquery3' ]
+  grunt.registerTask 'test-all', [ 'compile', 'jasmine'         ]
 
-  grunt.registerTask 'build', [ 'code', 'lint', 'test-all', 'uglify' ]
+  grunt.registerTask 'build', [ 'compile', 'lint', 'test-all', 'uglify' ]
 
-  grunt.registerTask 'git-push-dist', [ 'git:add', 'git:commit', 'git:tag', 'git:push' ]
+  grunt.registerTask 'git-release-tag', [ 'git:createTag', 'git:pushTag']
+  grunt.registerTask 'git-push-dist',   [ 'git:add', 'git:commit', 'git:push', 'git-release-tag']
+
+  grunt.registerTask 'default', [ 'test' ]
+
 
   # the version is comes from package.json:version
-  grunt.registerTask 'release', [ 'build', 'git-push-dist', 'exec:npm_publish' ]
+  grunt.registerTask 'release', (n) ->
+    unless grunt.option('tag')
+      console.error "\n\nERROR: missing argument '--tag' (--tag=1.x.x)\n\n"
+      return
 
-  grunt.registerTask 'default', [ 'build' ]
+    git_status = require('child_process').execSync('git status').toString();
+    #unless git_status.match(/working tree clean/)
+    if git_status.indexOf('working tree clean') == -1
+      console.error "\n\nERROR: uncomitted changes, use 'git status'\n\n"
+      return
+
+    console.log "\n\nINFO: creating release #{grunt.option('tag')}\n\n"
+
+    grunt.config('pkg.version', grunt.option('tag'))
+
+    grunt.task.run([ 'build', 'git-push-dist', 'exec:npm_publish' ]);

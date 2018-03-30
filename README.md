@@ -161,6 +161,9 @@ It also exposes the class `InputValidator` for manual instantiating.
   [Tom Hanoldt](https://www.tomhanoldt.info)
 
 ## Changelog
+### 1.0.4
+  * test for automated releases
+
 ### 1.0.3
   * refactor `onBuildErrorHint`
   * clear input events before attaching
