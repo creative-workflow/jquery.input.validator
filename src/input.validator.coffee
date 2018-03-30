@@ -25,18 +25,6 @@ class @InputValidator
       # coffeelint: enable
 
     rules:
-      number: (validator, $element, value) ->
-        return true if $element.attr('type') != 'number' || !(''+value).length
-        validator.config.pattern.number.test(value)
-
-      tel: (validator, $element, value) ->
-        return true if $element.attr('type') != 'tel' || !(''+value).length
-        validator.config.pattern.tel.test(value)
-
-      email: (validator, $element, value) ->
-        return true if $element.attr('type') != 'email' || !(''+value).length
-        validator.config.pattern.email.test(value)
-
       minlength: (validator, $element, value) ->
         return true unless $element.attr('minlength')
         ('' + value).length >= parseInt($element.attr('minlength'), 10)
@@ -50,6 +38,18 @@ class @InputValidator
         return false if value == undefined || value == null
         return !!value.length if typeof(value) in ['string', 'array' ]
         !!value
+
+      number: (validator, $element, value) ->
+        return true if $element.attr('type') != 'number' || !(''+value).length
+        validator.config.pattern.number.test(value)
+
+      tel: (validator, $element, value) ->
+        return true if $element.attr('type') != 'tel' || !(''+value).length
+        validator.config.pattern.tel.test(value)
+
+      email: (validator, $element, value) ->
+        return true if $element.attr('type') != 'email' || !(''+value).length
+        validator.config.pattern.email.test(value)
 
       pattern: (validator, $element, value) ->
         return true if !$element.attr('pattern') || !(''+value).length
