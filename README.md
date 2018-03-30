@@ -168,6 +168,10 @@ It also exposes the class `InputValidator` for manual instantiating.
   [Tom Hanoldt](https://www.tomhanoldt.info)
 
 ## Changelog
+### 1.0.2
+  * fix error hint
+  * change rule ordering
+
 ### 1.0.1
   * readme
 

@@ -25,24 +25,6 @@
         email: /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
       },
       rules: {
-        number: function(validator, $element, value) {
-          if ($element.attr('type') !== 'number' || !('' + value).length) {
-            return true;
-          }
-          return validator.config.pattern.number.test(value);
-        },
-        tel: function(validator, $element, value) {
-          if ($element.attr('type') !== 'tel' || !('' + value).length) {
-            return true;
-          }
-          return validator.config.pattern.tel.test(value);
-        },
-        email: function(validator, $element, value) {
-          if ($element.attr('type') !== 'email' || !('' + value).length) {
-            return true;
-          }
-          return validator.config.pattern.email.test(value);
-        },
         minlength: function(validator, $element, value) {
           if (!$element.attr('minlength')) {
             return true;
@@ -67,6 +49,24 @@
             return !!value.length;
           }
           return !!value;
+        },
+        number: function(validator, $element, value) {
+          if ($element.attr('type') !== 'number' || !('' + value).length) {
+            return true;
+          }
+          return validator.config.pattern.number.test(value);
+        },
+        tel: function(validator, $element, value) {
+          if ($element.attr('type') !== 'tel' || !('' + value).length) {
+            return true;
+          }
+          return validator.config.pattern.tel.test(value);
+        },
+        email: function(validator, $element, value) {
+          if ($element.attr('type') !== 'email' || !('' + value).length) {
+            return true;
+          }
+          return validator.config.pattern.email.test(value);
         },
         pattern: function(validator, $element, value) {
           if (!$element.attr('pattern') || !('' + value).length) {
@@ -104,12 +104,13 @@
         onBuildErrorElement: function(validator, $element, value, errors) {
           var $hint, error;
           error = errors[0];
-          $hint = $element.parent().find(validator.config.classes.hint);
-          if (!$hint.length) {
-            $hint = $(("<label class='" + validator.config.classes.hint + "' ") + ("for='" + ($element.attr('id')) + "'>") + error.message + "</label>");
+          $hint = $element.data('inputvalidator-hint');
+          if ($hint) {
+            $hint.html(error.message);
+            return;
           }
-          $element.data('inputvalidator-hint', $hint);
-          return $element.after($hint);
+          $hint = $(("<label class='" + validator.config.classes.hint + "' ") + ("for='" + ($element.attr('id')) + "'>") + error.message + "</label>");
+          return $element.data('inputvalidator-hint', $hint).after($hint);
         },
         onValidIntern: function(validator, $element, value, errors) {
           var classes;
@@ -131,6 +132,7 @@
           classes = validator.config.classes;
           $element.removeClass(classes.error + " " + classes.valid);
           $($element.data('inputvalidator-hint')).remove();
+          $element.data('inputvalidator-hint', void 0);
           if (typeof (base = validator.config.handler).onReset === "function") {
             base.onReset(validator, $element);
           }
@@ -242,13 +244,13 @@
         }
       }
       if (errors.length > 0) {
-        $element.attr('invalid', true);
+        $element.data('invalid', true);
         this.config.handler.onInvalidIntern(this, $element, value, errors);
         if (this.config.focusInvalidElement) {
           $element.first().focus();
         }
       } else {
-        $element.attr('invalid', false);
+        $element.data('invalid', false);
         this.config.handler.onValidIntern(this, $element, value, errors);
       }
       return errors;
