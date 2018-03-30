@@ -1,7 +1,7 @@
 {
   "name": "jquery.input.validator",
   "version": "1.0.0",
-  "description": "This module helps to handle independent input validation based on standart html attributes.",
+  "description": "This module helps to handle input validation based on standart html attributes.",
   "main": "dist/jquery.input.validator.js",
   "repository": {
     "type": "git",

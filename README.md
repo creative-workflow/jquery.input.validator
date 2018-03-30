@@ -1,6 +1,6 @@
 # jquery.input.validator [![Build Status](https://travis-ci.org/creative-workflow/jquery.input.validator.svg?branch=master)](https://travis-ci.org/creative-workflow/jquery.input.validator) [![Code Climate](https://codeclimate.com/github/creative-workflow/jquery.input.validator/badges/gpa.svg)](https://codeclimate.com/github/creative-workflow/jquery.input.validator)
 
-This module helps to handle independent input validation based on standart html attributes.
+This module helps to handle input validation based on standart html attributes.
 
 This plugin uses [jquery.debug](https://github.com/creative-workflow/jquery.debug) so all tracking information can be easily seen in the javascript console.
 
@@ -9,7 +9,8 @@ This plugin uses [jquery.debug](https://github.com/creative-workflow/jquery.debu
 
 bower install jquery.input.validator
 
-    # or
+# or
+
 npm install jquery.input.validator
 
 ```    
@@ -43,93 +44,93 @@ It also exposes the class `InputValidator` for manual instantiating.
 ### Configuration
 ####
 ```coffee
-    validateOnFocusOut: true
-    validateOnKeyUp: false
-    validateOnClick: false
+  validateOnFocusOut: true
+  validateOnKeyUp: false
+  validateOnClick: false
 
-    focusInvalidElement: true
-    removeHintOnFocus: false
+  focusInvalidElement: true
+  removeHintOnFocus: false
 
-    selectors:
-      elements: 'input, textarea, select'
-      ignore: ':hidden'
+  selectors:
+    elements: 'input, textarea, select'
+    ignore: ':hidden'
 
-    classes:
-      error: 'error'
-      valid: 'valid'
-      hint:  'error-hint'
+  classes:
+    error: 'error'
+    valid: 'valid'
+    hint:  'error-hint'
 
-    pattern:
-      decimal: /^[\d\.]*$/
-      number: /^\d*$/
-      tel: /^[0-9/\-\+\s\(\)]*$/
-      email: /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
+  pattern:
+    decimal: /^[\d\.]*$/
+    number: /^\d*$/
+    tel: /^[0-9/\-\+\s\(\)]*$/
+    email: /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
 
-    rules:
-      number: (validator, $element, value) ->
-        return true if $element.attr('type') != 'number' || !(''+value).length
-        validator.config.pattern.number.test(value)
+  rules:
+    number: (validator, $element, value) ->
+      return true if $element.attr('type') != 'number' || !(''+value).length
+      validator.config.pattern.number.test(value)
 
-      tel: (validator, $element, value) ->
-        return true if $element.attr('type') != 'tel' || !(''+value).length
-        validator.config.pattern.tel.test(value)
+    tel: (validator, $element, value) ->
+      return true if $element.attr('type') != 'tel' || !(''+value).length
+      validator.config.pattern.tel.test(value)
 
-      email: (validator, $element, value) ->
-        return true if $element.attr('type') != 'email' || !(''+value).length
-        validator.config.pattern.email.test(value)
+    email: (validator, $element, value) ->
+      return true if $element.attr('type') != 'email' || !(''+value).length
+      validator.config.pattern.email.test(value)
 
-      minlength: (validator, $element, value) ->
-        return true unless $element.attr('minlength')
-        ('' + value).length >= parseInt($element.attr('minlength'), 10)
+    minlength: (validator, $element, value) ->
+      return true unless $element.attr('minlength')
+      ('' + value).length >= parseInt($element.attr('minlength'), 10)
 
-      maxlength: (validator, $element, value) ->
-        return true unless $element.attr('maxlength')
-        ('' + value).length <= parseInt($element.attr('maxlength'), 10)
+    maxlength: (validator, $element, value) ->
+      return true unless $element.attr('maxlength')
+      ('' + value).length <= parseInt($element.attr('maxlength'), 10)
 
-      required: (validator, $element, value) ->
-        return true unless $element.attr('required')
-        return false if value == undefined || value == null
-        return !!value.length if typeof(value) in ['string', 'array' ]
-        !!value
+    required: (validator, $element, value) ->
+      return true unless $element.attr('required')
+      return false if value == undefined || value == null
+      return !!value.length if typeof(value) in ['string', 'array' ]
+      !!value
 
-      pattern: (validator, $element, value) ->
-        return true if !$element.attr('pattern') || !(''+value).length
-        (''+value).match($element.attr('pattern'))
+    pattern: (validator, $element, value) ->
+      return true if !$element.attr('pattern') || !(''+value).length
+      (''+value).match($element.attr('pattern'))
 
-      hasClass: (validator, $element, value) ->
-        return true unless $element.data('rule-has-class')
-        $element.hasClass($element.data('rule-has-class'))
+    hasClass: (validator, $element, value) ->
+      return true unless $element.data('rule-has-class')
+      $element.hasClass($element.data('rule-has-class'))
 
-      decimal: (validator, $element, value) ->
-        return true unless $element.data('rule-decimal') || !(''+value).length
-        validator.config.pattern.decimal.test(value)
+    decimal: (validator, $element, value) ->
+      return true unless $element.data('rule-decimal') || !(''+value).length
+      validator.config.pattern.decimal.test(value)
 
-    messages:
-      generic:   'invalid'
-      email:     'invalid email'
-      tel:       'invalid phone number'
-      number:    'invalid number'
-      minlength: 'to short'
-      maxlength: 'to long'
-      required:  'required'
-      hasClass:  'missing class'
+  messages:
+    generic:   'invalid'
+    email:     'invalid email'
+    tel:       'invalid phone number'
+    number:    'invalid number'
+    minlength: 'to short'
+    maxlength: 'to long'
+    required:  'required'
+    hasClass:  'missing class'
 
-    handler:
-      onValid:   null
-      onInvalid: null
-      onReset:   null
-      onBuildErrorElement: (validator, $element, value, errors) ->
-        error = errors[0]
-        $hint = $element.parent().find(validator.config.classes.hint)
+  handler:
+    onValid:   null
+    onInvalid: null
+    onReset:   null
+    onBuildErrorElement: (validator, $element, value, errors) ->
+      error = errors[0]
+      $hint = $element.parent().find(validator.config.classes.hint)
 
-        unless $hint.length
-          $hint = $("<label class='#{validator.config.classes.hint}' " +
-            "for='#{$element.attr('id')}'>" +
-            error.message +
-            "</label>")
+      unless $hint.length
+        $hint = $("<label class='#{validator.config.classes.hint}' " +
+          "for='#{$element.attr('id')}'>" +
+          error.message +
+          "</label>")
 
-        $element.data('inputvalidator-hint', $hint)
-        $element.after($hint)
+      $element.data('inputvalidator-hint', $hint)
+      $element.after($hint)
 
 ```
 
@@ -147,10 +148,10 @@ It also exposes the class `InputValidator` for manual instantiating.
 #### Setup
   * `npm install`
   * `bower install`
-  * `npm test`
+  * `npm run test`
 
 #### Run tests and linter
-  * `npm test`
+  * `npm run test`
 
 #### Generate build
   * `npm run build`
