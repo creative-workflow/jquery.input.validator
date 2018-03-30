@@ -74,18 +74,6 @@ It also exposes the class `InputValidator` for manual instantiating.
     email: /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
 
   rules:
-    number: (validator, $element, value) ->
-      return true if $element.attr('type') != 'number' || !(''+value).length
-      validator.config.pattern.number.test(value)
-
-    tel: (validator, $element, value) ->
-      return true if $element.attr('type') != 'tel' || !(''+value).length
-      validator.config.pattern.tel.test(value)
-
-    email: (validator, $element, value) ->
-      return true if $element.attr('type') != 'email' || !(''+value).length
-      validator.config.pattern.email.test(value)
-
     minlength: (validator, $element, value) ->
       return true unless $element.attr('minlength')
       ('' + value).length >= parseInt($element.attr('minlength'), 10)
@@ -99,6 +87,18 @@ It also exposes the class `InputValidator` for manual instantiating.
       return false if value == undefined || value == null
       return !!value.length if typeof(value) in ['string', 'array' ]
       !!value
+
+    number: (validator, $element, value) ->
+      return true if $element.attr('type') != 'number' || !(''+value).length
+      validator.config.pattern.number.test(value)
+
+    tel: (validator, $element, value) ->
+      return true if $element.attr('type') != 'tel' || !(''+value).length
+      validator.config.pattern.tel.test(value)
+
+    email: (validator, $element, value) ->
+      return true if $element.attr('type') != 'email' || !(''+value).length
+      validator.config.pattern.email.test(value)
 
     pattern: (validator, $element, value) ->
       return true if !$element.attr('pattern') || !(''+value).length
@@ -128,16 +128,19 @@ It also exposes the class `InputValidator` for manual instantiating.
     onReset:   null
     onBuildErrorElement: (validator, $element, value, errors) ->
       error = errors[0]
-      $hint = $element.parent().find(validator.config.classes.hint)
+      $hint = $element.data('inputvalidator-hint')
 
-      unless $hint.length
-        $hint = $("<label class='#{validator.config.classes.hint}' " +
-          "for='#{$element.attr('id')}'>" +
-          error.message +
-          "</label>")
+      if $hint
+        $hint.html(error.message)
+        return
+
+      $hint = $("<label class='#{validator.config.classes.hint}' " +
+        "for='#{$element.attr('id')}'>" +
+        error.message +
+        "</label>")
 
       $element.data('inputvalidator-hint', $hint)
-      $element.after($hint)
+              .after($hint)
 
 ```
 
