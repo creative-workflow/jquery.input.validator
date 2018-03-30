@@ -114,7 +114,7 @@ class @InputValidator
         classes = validator.config.classes
         $element.removeClass("#{classes.error} #{classes.valid}")
         $($element.data('inputvalidator-hint')).remove()
-        $element.data('inputvalidator-hint', undefined)
+        $element.data('inputvalidator-hint', null)
         validator.config.handler.onReset?(validator, $element)
         validator.config.handler.onValid?(validator, $element, value, errors)
 
@@ -189,10 +189,11 @@ class @InputValidator
     errors
 
   reset: (context = null) =>
-    @resetElement(@elementsFor(context))
+    for element in @elementsFor(context)
+      @resetElement(element)
 
-  resetElement: ($element) =>
-    @config.handler.onResetIntern(@, $element)
+  resetElement: (element) =>
+    @config.handler.onResetIntern(@, $(element))
 
   elementsFor: (context = null) =>
     context ?= @context

@@ -1,21 +1,24 @@
 
 describe 'jquery.input.validator', ->
-  $ = jQuery
+  $         = jQuery
+  helper    = jasmine.helper
   validator = $('body').inputValidator()
-  appendAndCallback = (content, callback) =>
-    $content = $(content)
-    $('body').append($content)
-    callback($content)
-    $content.remove()
+
+  validElements = [
+    {type: 'email' , value: 'tom@creative-workflow.berlin' },
+    {type: 'number', value: 42, required: true}
+  ]
+
+  invalidElements = [
+    {type: 'email' , value: 'tomcreative-workflow.berlin' },
+    {type: 'number', required: true}
+  ]
 
   describe "config", ->
 
     describe "validateOnClick", ->
       it 'validates on click', ->
-        elements = '<div>'
-        elements+= '<input type="email" value="invalid.email">'
-        elements+= '</div>'
-        appendAndCallback(elements, ($elements) ->
+        helper.appendAndCallback(invalidElements, ($elements) ->
           $elements.inputValidator({
             validateOnClick: true
           })
@@ -28,42 +31,25 @@ describe 'jquery.input.validator', ->
 
   describe "validate", ->
     it 'validates valid given context', ->
-      elements = '<div>'
-      elements+= '<input type="email" value="tom@creative-workflow.berlin">'
-      elements+= '<input type="number" value="42" required>'
-      elements+= '</div>'
-      appendAndCallback(elements, ($elements) ->
+      helper.appendAndCallback(validElements, ($elements) ->
         errors = $elements.inputValidator().validate()
-        expect(errors.length).toBe 0
+        helper.expectValid(errors)
       )
 
-    it 'validates invalid given context adhoc', ->
-      elements = '<div>'
-      elements+= '<input type="email" value="tomcreative-workflow.berlin">'
-      elements+= '<input type="number" value="" required>'
-      elements+= '</div>'
-      appendAndCallback(elements, ($elements) ->
-        errors = $elements.inputValidator().validate()
+    it 'validates invalid given context', ->
+      helper.appendAndCallback(invalidElements, ($elements) ->
+        errors = $elements.inputValidator().validate($elements)
         expect(errors.length).toBe 2
       )
-
 
     it 'validates valid given context adhoc', ->
-      elements = '<div>'
-      elements+= '<input type="email" value="tom@creative-workflow.berlin">'
-      elements+= '<input type="number" value="42" required>'
-      elements+= '</div>'
-      appendAndCallback(elements, ($elements) ->
+      helper.appendAndCallback(validElements, ($elements) ->
         errors = validator.validate($elements)
-        expect(errors.length).toBe 0
+        helper.expectValid(errors)
       )
 
     it 'validates invalid given context adhoc', ->
-      elements = '<div>'
-      elements+= '<input type="email" value="tomcreative-workflow.berlin">'
-      elements+= '<input type="number" value="" required>'
-      elements+= '</div>'
-      appendAndCallback(elements, ($elements) ->
+      helper.appendAndCallback(invalidElements, ($elements) ->
         errors = validator.validate($elements)
-        expect(errors.length).toBe 2
+        helper.expectInValid(errors)
       )

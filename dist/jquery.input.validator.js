@@ -132,7 +132,7 @@
           classes = validator.config.classes;
           $element.removeClass(classes.error + " " + classes.valid);
           $($element.data('inputvalidator-hint')).remove();
-          $element.data('inputvalidator-hint', void 0);
+          $element.data('inputvalidator-hint', null);
           if (typeof (base = validator.config.handler).onReset === "function") {
             base.onReset(validator, $element);
           }
@@ -258,14 +258,21 @@
     };
 
     InputValidator.prototype.reset = function(context) {
+      var element, i, len, ref, results;
       if (context == null) {
         context = null;
       }
-      return this.resetElement(this.elementsFor(context));
+      ref = this.elementsFor(context);
+      results = [];
+      for (i = 0, len = ref.length; i < len; i++) {
+        element = ref[i];
+        results.push(this.resetElement(element));
+      }
+      return results;
     };
 
-    InputValidator.prototype.resetElement = function($element) {
-      return this.config.handler.onResetIntern(this, $element);
+    InputValidator.prototype.resetElement = function(element) {
+      return this.config.handler.onResetIntern(this, $(element));
     };
 
     InputValidator.prototype.elementsFor = function(context) {
@@ -308,3 +315,5 @@
   }
 
 }).call(this);
+
+//# sourceMappingURL=jquery.input.validator.js.map

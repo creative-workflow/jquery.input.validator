@@ -1,87 +1,83 @@
 
 describe 'jquery.input.validator', ->
-  $ = jQuery
+  $         = jQuery
+  helper    = jasmine.helper
   validator = $('body').inputValidator()
-  appendAndCallback = (content, callback) =>
-    $content = $(content)
-    $('body').append($content)
-    callback($content)
-    $content.remove()
+
+  hintSelector  = ".#{validator.config.classes.hint}"
+
+  validElements = [
+    {type: 'email' , value: 'tom@creative-workflow.berlin' },
+    {type: 'number', value: 42, required: true}
+  ]
+
+  invalidElements = [
+    {type: 'email' , value: 'tomcreative-workflow.berlin' },
+    {type: 'number', required: true}
+  ]
 
   describe "hint", ->
     it 'gets added to invalid inputs', ->
-      elements = '<div>'
-      elements+= '<input type="email" value="tomcreative-workflow.berlin">'
-      elements+= '<input type="number" value="" required>'
-      elements+= '</div>'
-      appendAndCallback(elements, ($elements) ->
+      helper.appendAndCallback(invalidElements, ($elements) ->
         $element = $('input', $elements).first()
 
-        expect($(".#{validator.config.classes.hint}", $elements).length).toBe 0
+        expect($(hintSelector, $elements).length).toBe 0
 
-        errors = validator.validateElement($element)
+        helper.expectInValid(validator.validateElement($element))
 
-        expect(errors.length).toBe 1
-
-        expect($(".#{validator.config.classes.hint}", $elements).length).toBe 1
+        expect($(hintSelector, $elements).length).toBe 1
       )
 
-    it 'gets removed if input gets valid', ->
-      elements = '<div>'
-      elements+= '<input type="email" value="tomcreative-workflow.berlin">'
-      elements+= '</div>'
-      appendAndCallback(elements, ($elements) ->
-        expect($(".#{validator.config.classes.hint}", $elements).length).toBe 0
+    describe "reset", ->
+      it 'gets removed if input gets valid', ->
+        helper.appendAndCallback(invalidElements, ($elements) ->
+          expect($(hintSelector, $elements).length).toBe 0
 
-        errors = validator.validate($elements)
-        expect($(".#{validator.config.classes.hint}", $elements).length).toBe 1
+          validator.validate($elements)
+          expect($(hintSelector, $elements).length).toBe 2
 
-        validator.reset($elements)
-        expect($(".#{validator.config.classes.hint}", $elements).length).toBe 0
-      )
+          validator.reset($elements)
+          expect($(hintSelector, $elements).length).toBe 0
+        )
 
     it 'shows the default message', ->
-      elements = '<div>'
-      elements+= '<input type="email" value="tomcreative-workflow.berlin">'
-      elements+= '</div>'
-      appendAndCallback(elements, ($elements) ->
-        $element = $('input', $elements).first()
+      helper.appendAndCallback(invalidElements, ($elements) ->
+        $input = $('input', $elements).first()
 
-        errors = validator.validateElement($element)
+        validator.validateElement($input)
 
-        $label = $(".#{validator.config.classes.hint}", $elements)
+        $label = $(hintSelector, $elements)
         expect($label.length).toBe 1
         expect($label.text()).toBe validator.config.messages.email
       )
 
     it 'shows the data message', ->
-      elements = '<div>'
-      elements+= '<input type="email" data-msg-email="hint text" value="tomcreative-workflow.berlin">'
-      elements+= '</div>'
-      appendAndCallback(elements, ($elements) ->
-        $element = $('input', $elements).first()
+      elements = [
+        {type: 'email', value:'invalid', 'data-msg-email': 'hint text'}
+      ]
+      helper.appendAndCallback(elements, ($elements) ->
+        $input = $('input', $elements).first()
 
-        errors = validator.validateElement($element)
+        validator.validateElement($input)
 
-        $label = $(".#{validator.config.classes.hint}", $elements)
+        $label = $(hintSelector, $elements)
         expect($label.length).toBe 1
         expect($label.text()).toBe 'hint text'
       )
 
     it 'changes the message', ->
-      elements = '<div>'
-      elements+= '<input type="email" minlength="3" value="ab">'
-      elements+= '</div>'
-      appendAndCallback(elements, ($elements) ->
+      elements = [
+        {type: 'email', value:'ab', 'minlength': 3}
+      ]
+      helper.appendAndCallback(elements, ($elements) ->
         $element = $('input', $elements).first()
 
         validator.validateElement($element)
 
-        $label = $(".#{validator.config.classes.hint}", $elements)
+        $label = $(hintSelector, $elements)
         expect($label.text()).toBe validator.config.messages.minlength
 
-
-        $element.val('not mor minlength')
+        $element.val('not more minlength')
         validator.validateElement($element)
         expect($label.text()).toBe validator.config.messages.email
       )

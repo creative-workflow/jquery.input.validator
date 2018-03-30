@@ -66,13 +66,22 @@ module.exports = (grunt) ->
           banner: '# <% includes.files.dest %>'
 
     coffee:
-      compile:
+      dist:
+        options:
+          sourceMap: true
         files:
           'dist/jquery.input.validator.js': 'build/jquery.input.validator.coffee'
-          'build/spec/rules.spec.js': 'spec/rules.spec.coffee'
+      specs:
+        options:
+          sourceMap: true
+          flatten: false
+          expand: false
+        files:
+          'build/spec/helper.js':          'spec/helper.coffee'
           'build/spec/controller.spec.js': 'spec/controller.spec.coffee'
-          'build/spec/reset.spec.js': 'spec/reset.spec.coffee'
-          'build/spec/hint.spec.js': 'spec/hint.spec.coffee'
+          'build/spec/hint.spec.js':       'spec/hint.spec.coffee'
+          'build/spec/reset.spec.js':      'spec/reset.spec.coffee'
+          'build/spec/rules.spec.js':      'spec/rules.spec.coffee'
 
     coffeelint:
       app:
@@ -87,11 +96,16 @@ module.exports = (grunt) ->
     exec:
       npm_publish: 'npm publish'
 
+    clean:
+      build: 'build'
+      dist:  'dist'
+
     jasmine:
       jquery1:
         src: 'dist/jquery.input.validator.js'
         options:
-          specs: 'build/spec/*spec.js'
+          specs:   'build/spec/*spec.js'
+          helpers: 'build/spec/*helper.js'
           vendor: [
             "bower_components/jquery-1/jquery.min.js"
             "bower_components/jasmine-jquery-legacy/lib/jasmine-jquery.js"
@@ -99,7 +113,8 @@ module.exports = (grunt) ->
       jquery2:
         src: 'dist/jquery.input.validator.js'
         options:
-          specs: 'build/spec/*spec.js'
+          specs:   'build/spec/*spec.js'
+          helpers: 'build/spec/*helper.js'
           vendor: [
             "bower_components/jquery-2/dist/jquery.min.js"
             "bower_components/jasmine-jquery/lib/jasmine-jquery.js"
@@ -107,13 +122,15 @@ module.exports = (grunt) ->
       jquery3:
         src: 'dist/jquery.input.validator.js'
         options:
-          specs: 'build/spec/*spec.js'
+          specs:   'build/spec/*spec.js'
+          helpers: 'build/spec/*helper.js'
           vendor: [
             "bower_components/jquery-3/dist/jquery.min.js"
             "bower_components/jasmine-jquery/lib/jasmine-jquery.js"
           ]
       jquery3Slim:
-        src: 'dist/jquery.input.validator.js'
+        specs:   'build/spec/*spec.js'
+        helpers: 'build/spec/*helper.js'
         options:
           specs: 'build/spec/*spec.js'
           vendor: [
@@ -130,7 +147,7 @@ module.exports = (grunt) ->
     if key != 'grunt' and key.indexOf('grunt') == 0
       grunt.loadNpmTasks key
 
-  grunt.registerTask 'code', [ 'includes', 'coffee', 'replace:dist', 'replace:bower' ]
+  grunt.registerTask 'code', [ 'clean', 'includes', 'coffee', 'replace:dist', 'replace:bower' ]
 
   grunt.registerTask 'lint', [ 'includes', 'coffeelint' ]
 
