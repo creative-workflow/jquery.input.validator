@@ -34,10 +34,16 @@ module.exports = (grunt) ->
         }]
       bower:
         options:
-          patterns: [{
-            match: /"version": "([^"]*)"/
-            replacement: '"version": "<%= pkg.version %>"'
-          }]
+          patterns: [
+            {
+              match: /"version": "([^"]*)"/
+              replacement: '"version": "<%= pkg.version %>"'
+            },
+            {
+              match: /"description": "([^"]*)"/
+              replacement: '"description": "<%= pkg.description %>"'
+            }
+          ]
         files: [{
           expand: true
           flatten: true
@@ -166,4 +172,4 @@ module.exports = (grunt) ->
 
     grunt.config('pkg.version', grunt.option('tag'))
 
-    grunt.task.run([ 'build' ]) #, 'git-push-dist', 'exec:npm_publish' ]);
+    grunt.task.run([ 'build', 'git-push-dist', 'exec:npm_publish' ]);
