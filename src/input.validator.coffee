@@ -131,21 +131,17 @@ class @InputValidator
 
     $elements = @elements(context)
     if @config.validateOnFocusOut
-      $elements.focusout (e) =>
-        @validateElement(e.target)
+      $elements.focusout (e) => @validateElement(e.target)
 
     if @config.removeHintOnFocus
-      $elements.focus (e) =>
-        @resetElement(e.target)
+      $elements.focus (e) => @resetElement(e.target)
 
     if @config.validateOnKeyUp
       $elements.keyup (e) =>
         @validateElement(e.target) if $(e.target).data('invalid')
 
     if @config.validateOnClick
-      $elements.click (e) =>
-        errors = @validateElement(e.target)
-
+      $elements.click (e) => @validateElement(e.target)
 
   validate: (context = null) =>
     errors = []
@@ -163,7 +159,7 @@ class @InputValidator
     for name, rule of @config.rules
       unless rule(@, $element, value)
         errors.push {
-          message: $element.data("msg-#{name}") || @getMessage(name)
+          message: $element.data("msg-#{name}") || @messageFor(name)
           element: $element
           rule: name
           value:   value
@@ -191,6 +187,6 @@ class @InputValidator
     $(@config.selectors.elements, context)
       .not(@config.selectors.ignore)
 
-  getMessage: (name) =>
+  messageFor: (name) =>
     return @config.messages.generic unless @config.messages?[name]
     @config.messages[name]
