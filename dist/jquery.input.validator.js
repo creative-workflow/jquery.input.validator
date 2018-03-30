@@ -101,16 +101,18 @@
         onValid: null,
         onInvalid: null,
         onReset: null,
-        onBuildErrorElement: function(validator, $element, value, errors) {
+        onBuildErrorHint: function(validator, $element, value, errors) {
+          return $(("<label class='" + validator.config.classes.hint + "' ") + ("for='" + ($element.attr('id')) + "'></label>"));
+        },
+        onBuildErrorHintIntern: function(validator, $element, value, errors) {
           var $hint, error;
           error = errors[0];
           $hint = $element.data('inputvalidator-hint');
-          if ($hint) {
-            $hint.html(error.message);
-            return;
+          if (!$hint) {
+            $hint = validator.config.handler.onBuildErrorHint(validator, $element, value, errors);
+            $element.data('inputvalidator-hint', $hint).after($hint);
           }
-          $hint = $(("<label class='" + validator.config.classes.hint + "' ") + ("for='" + ($element.attr('id')) + "'>") + error.message + "</label>");
-          return $element.data('inputvalidator-hint', $hint).after($hint);
+          return $hint.html(error.message);
         },
         onValidIntern: function(validator, $element, value, errors) {
           var classes;
@@ -119,13 +121,11 @@
           return $element.removeClass(classes.error).addClass(classes.valid);
         },
         onInvalidIntern: function(validator, $element, value, errors) {
-          var base, base1, classes;
+          var base, classes;
           classes = validator.config.classes;
           $element.removeClass(classes.valid).addClass(classes.error);
-          if (typeof (base = validator.config.handler).onBuildErrorElement === "function") {
-            base.onBuildErrorElement(validator, $element, value, errors);
-          }
-          return typeof (base1 = validator.config.handler).onInvalid === "function" ? base1.onInvalid(validator, $element, value, errors) : void 0;
+          validator.config.handler.onBuildErrorHintIntern(validator, $element, value, errors);
+          return typeof (base = validator.config.handler).onInvalid === "function" ? base.onInvalid(validator, $element, value, errors) : void 0;
         },
         onResetIntern: function(validator, $element) {
           var base, base1, classes;
@@ -146,7 +146,7 @@
       if (config == null) {
         config = {};
       }
-      this.getMessage = bind(this.getMessage, this);
+      this.messageFor = bind(this.messageFor, this);
       this.elements = bind(this.elements, this);
       this.resetElement = bind(this.resetElement, this);
       this.reset = bind(this.reset, this);
@@ -204,8 +204,7 @@
       if (this.config.validateOnClick) {
         return $elements.click((function(_this) {
           return function(e) {
-            var errors;
-            return errors = _this.validateElement(e.target);
+            return _this.validateElement(e.target);
           };
         })(this));
       }
@@ -236,7 +235,7 @@
         rule = ref[name];
         if (!rule(this, $element, value)) {
           errors.push({
-            message: $element.data("msg-" + name) || this.getMessage(name),
+            message: $element.data("msg-" + name) || this.messageFor(name),
             element: $element,
             rule: name,
             value: value
@@ -277,7 +276,7 @@
       return $(this.config.selectors.elements, context).not(this.config.selectors.ignore);
     };
 
-    InputValidator.prototype.getMessage = function(name) {
+    InputValidator.prototype.messageFor = function(name) {
       var ref;
       if (!((ref = this.config.messages) != null ? ref[name] : void 0)) {
         return this.config.messages.generic;

@@ -77,21 +77,22 @@ class @InputValidator
       onValid:   null
       onInvalid: null
       onReset:   null
-      onBuildErrorElement: (validator, $element, value, errors) ->
+      onBuildErrorHint: (validator, $element, value, errors) ->
+        $("<label class='#{validator.config.classes.hint}' " +
+          "for='#{$element.attr('id')}'></label>")
+
+      onBuildErrorHintIntern: (validator, $element, value, errors) ->
         error = errors[0]
         $hint = $element.data('inputvalidator-hint')
 
-        if $hint
-          $hint.html(error.message)
-          return
+        unless $hint
+          $hint = validator.config.handler.onBuildErrorHint(validator,
+            $element, value, errors)
 
-        $hint = $("<label class='#{validator.config.classes.hint}' " +
-          "for='#{$element.attr('id')}'>" +
-          error.message +
-          "</label>")
+          $element.data('inputvalidator-hint', $hint)
+                  .after($hint)
 
-        $element.data('inputvalidator-hint', $hint)
-                .after($hint)
+        $hint.html(error.message)
 
       onValidIntern: (validator, $element, value, errors) ->
         classes = validator.config.classes
@@ -104,7 +105,7 @@ class @InputValidator
         $element.removeClass(classes.valid)
                 .addClass(classes.error)
 
-        validator.config.handler.onBuildErrorElement?(
+        validator.config.handler.onBuildErrorHintIntern(
           validator, $element, value, errors)
 
         validator.config.handler.onInvalid?(validator, $element, value, errors)

@@ -42,7 +42,7 @@ errors = validator.validateElement('<input type="text" data-rule-decimal="true">
 errors = validator.validateElement('<input type="text" data-rule-pattern="true" pattern="blub[\\d*]" value="blub23" >')
 errors = validator.validateElement('<input type="text" data-has-class="hello" class="hello">')
 
-errors = validator.validateElement('<input type="text" required data-msg-required="required">')
+errors = validator.validateElement('<input type="text" required data-msg-required="required!">')
 
 // TODO: write docs
 ```
@@ -127,20 +127,8 @@ It also exposes the class `InputValidator` for manual instantiating.
     onInvalid: null
     onReset:   null
     onBuildErrorElement: (validator, $element, value, errors) ->
-      error = errors[0]
-      $hint = $element.data('inputvalidator-hint')
-
-      if $hint
-        $hint.html(error.message)
-        return
-
-      $hint = $("<label class='#{validator.config.classes.hint}' " +
-        "for='#{$element.attr('id')}'>" +
-        error.message +
-        "</label>")
-
-      $element.data('inputvalidator-hint', $hint)
-              .after($hint)
+      $("<label class='#{validator.config.classes.hint}' " +
+        "for='#{$element.attr('id')}'></label>")
 
 ```
 
@@ -171,6 +159,9 @@ It also exposes the class `InputValidator` for manual instantiating.
   [Tom Hanoldt](https://www.tomhanoldt.info)
 
 ## Changelog
+### WIP: 1.0.3
+  * refactor `onBuildErrorHint`
+
 ### 1.0.2
   * fix error hint
   * change rule ordering
