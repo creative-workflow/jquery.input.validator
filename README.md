@@ -1,4 +1,4 @@
-# jquery.input.validator # jquery.formslider [![Build Status](https://travis-ci.org/creative-workflow/jquery.input.validator.svg?branch=master)](https://travis-ci.org/creative-workflow/jquery.input.validator) [![Contribute](https://img.shields.io/badge/Contribution-Open-brightgreen.svg)](CONTRIBUTING.md) [![Code Climate](https://codeclimate.com/github/creative-workflow/jquery.input.validator/badges/gpa.svg)](https://codeclimate.com/github/creative-workflow/jquery.input.validator) [![npm](https://img.shields.io/npm/dt/jquery.input.validator.svg)](https://www.npmjs.com/package/jquery.input.validator) [![Beerpay](https://beerpay.io/creative-workflow/jquery.input.validator/badge.svg?style=flat)](https://beerpay.io/creative-workflow/jquery.input.validator)
+# jquery.input.validator # jquery.formslider [![Build Status](https://travis-ci.org/creative-workflow/jquery.input.validator.svg?branch=master)](https://travis-ci.org/creative-workflow/jquery.input.validator) [![Contribute](https://img.shields.io/badge/Contribution-Open-brightgreen.svg)](CONTRIBUTING.md) [![Beerpay](https://beerpay.io/creative-workflow/jquery.input.validator/badge.svg?style=flat)](https://beerpay.io/creative-workflow/jquery.input.validator)
 
 [![NPM](https://nodei.co/npm/jquery.input.validator.png)](https://nodei.co/npm/jquery.input.validator/)
 
@@ -165,6 +165,9 @@ It also exposes the class `InputValidator` for manual instantiating.
   [Tom Hanoldt](https://www.tomhanoldt.info)
 
 ## Changelog
+### 1.0.1
+  * readme
+  
 ### 1.0.0
   * initial
 
