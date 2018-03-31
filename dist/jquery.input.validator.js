@@ -150,7 +150,7 @@
       this.elementsFor = bind(this.elementsFor, this);
       this.resetElement = bind(this.resetElement, this);
       this.reset = bind(this.reset, this);
-      this.validateElement = bind(this.validateElement, this);
+      this.validateOne = bind(this.validateOne, this);
       this.validate = bind(this.validate, this);
       this.prepareElements = bind(this.prepareElements, this);
       this.init = bind(this.init, this);
@@ -183,7 +183,7 @@
       if (this.config.validateOnFocusOut) {
         $elements.off("focusout." + this.ns).on("focusout." + this.ns, (function(_this) {
           return function(e) {
-            return _this.validateElement(e.target);
+            return _this.validateOne(e.target);
           };
         })(this));
       }
@@ -198,7 +198,7 @@
         $elements.off("keyup." + this.ns).on("keyup." + this.ns, (function(_this) {
           return function(e) {
             if ($(e.target).data('invalid')) {
-              return _this.validateElement(e.target);
+              return _this.validateOne(e.target);
             }
           };
         })(this));
@@ -206,7 +206,7 @@
       if (this.config.validateOnClick) {
         return $elements.off("click." + this.ns).on("click." + this.ns, (function(_this) {
           return function(e) {
-            return _this.validateElement(e.target);
+            return _this.validateOne(e.target);
           };
         })(this));
       }
@@ -222,7 +222,7 @@
       ref = $elements.get();
       for (i = 0, len = ref.length; i < len; i++) {
         element = ref[i];
-        result = this.validateElement(element);
+        result = this.validateOne(element);
         if (result !== true) {
           errors = errors.concat(result);
         }
@@ -234,7 +234,7 @@
       }
     };
 
-    InputValidator.prototype.validateElement = function(element) {
+    InputValidator.prototype.validateOne = function(element) {
       var $element, errors, name, ref, rule, value;
       $element = $(element);
       value = $element.val();

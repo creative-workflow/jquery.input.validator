@@ -14,7 +14,7 @@ describe 'jquery.input.validator', ->
   hintSelector  = ".#{validator.config.classes.hint}"
 
   generateAndValidate = (element) ->
-    validator.validateElement(
+    validator.validateOne(
       helper.generateElement(element)
     )
 
@@ -37,7 +37,7 @@ describe 'jquery.input.validator', ->
         helper.appendAndCallback(elements, ($elements) ->
           $input = $('input', $elements).first()
 
-          validator.validateElement($input)
+          validator.validateOne($input)
 
           $label = $(hintSelector, $elements)
           expect($label.length).toBe 1

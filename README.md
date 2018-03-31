@@ -39,7 +39,7 @@ if( result === true )
 $('form').iValidator().reset();
 
 // validate element
-$('form').iValidator().validateElement(
+$('form').iValidator().validateOne(
                                     '<input type="email" value"invalid">'
                                   );
 ```
@@ -64,21 +64,21 @@ Validators are triggered from one or more attributes on an input element.
 ```js
 
 // validators by input type
-validator.validateElement('<input type="email"  value"invalid">');
-validator.validateElement('<input type="number" value"invalid">');
-validator.validateElement('<input type="tel"    value"invalid">');
+validator.validateOne('<input type="email"  value"invalid">');
+validator.validateOne('<input type="number" value"invalid">');
+validator.validateOne('<input type="tel"    value"invalid">');
 
 // validators by html5 attributes
-validator.validateElement('<input type="text" required>');
-validator.validateElement('<input type="text" minlength="1" maxlength="3">');
-validator.validateElement('<input type="text" pattern="^\\d*$">');
+validator.validateOne('<input type="text" required>');
+validator.validateOne('<input type="text" minlength="1" maxlength="3">');
+validator.validateOne('<input type="text" pattern="^\\d*$">');
 
 // validators by data attributes
-validator.validateElement('<input type="text" data-rule-decimal="true">');
-validator.validateElement('<input type="text" data-has-class="hello" class="hello">');
+validator.validateOne('<input type="text" data-rule-decimal="true">');
+validator.validateOne('<input type="text" data-has-class="hello" class="hello">');
 
 // add a custom message for an validator
-validator.validateElement('<input type="text" required data-msg-required="required!">');
+validator.validateOne('<input type="text" required data-msg-required="required!">');
 ```
 
 ### Dependencies

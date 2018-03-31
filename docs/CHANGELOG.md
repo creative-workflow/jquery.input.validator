@@ -1,10 +1,13 @@
 # Changelog
 
+##### 1.0.7
+  * rename `validateElement` to `validateOne`
+
 ##### 1.0.6
   * rename `inputValidator` to `iValidator`
   * add specs
   * enhance docs
-  * `validate` and `validateElement` returning now true on success
+  * `validate` and `validateOne` returning now true on success
 
 ##### 1.0.5
   * test for automated releases

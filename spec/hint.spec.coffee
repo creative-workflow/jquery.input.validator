@@ -13,7 +13,7 @@ describe 'jquery.input.validator', ->
 
         expect($(hintSelector, $elements).length).toBe 0
 
-        helper.expectInValid(validator.validateElement($element))
+        helper.expectInValid(validator.validateOne($element))
 
         expect($(hintSelector, $elements).length).toBe 1
       )
@@ -34,7 +34,7 @@ describe 'jquery.input.validator', ->
       helper.appendAndCallback(helper.invalidElements, ($elements) ->
         $input = $('input', $elements).first()
 
-        validator.validateElement($input)
+        validator.validateOne($input)
 
         $label = $(hintSelector, $elements)
         expect($label.length).toBe 1
@@ -48,7 +48,7 @@ describe 'jquery.input.validator', ->
       helper.appendAndCallback(elements, ($elements) ->
         $input = $('input', $elements).first()
 
-        validator.validateElement($input)
+        validator.validateOne($input)
 
         $label = $(hintSelector, $elements)
         expect($label.length).toBe 1
@@ -62,12 +62,12 @@ describe 'jquery.input.validator', ->
       helper.appendAndCallback(elements, ($elements) ->
         $element = $('input', $elements).first()
 
-        validator.validateElement($element)
+        validator.validateOne($element)
 
         $label = $(hintSelector, $elements)
         expect($label.text()).toBe validator.config.messages.minlength
 
         $element.val('not more minlength')
-        validator.validateElement($element)
+        validator.validateOne($element)
         expect($label.text()).toBe validator.config.messages.email
       )

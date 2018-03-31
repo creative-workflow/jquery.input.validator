@@ -4,11 +4,11 @@ describe 'jquery.input.validator', ->
   validator = $('body').iValidator()
 
   generateAndValidate = (element) ->
-    validator.validateElement(
+    validator.validateOne(
       helper.generateElement(element)
     )
 
-  describe "validateElement", ->
+  describe "validateOne", ->
     describe "rules", ->
 
       describe "email", ->

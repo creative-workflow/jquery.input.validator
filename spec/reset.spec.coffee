@@ -34,7 +34,7 @@ describe 'jquery.input.validator', ->
       helper.appendAndCallback(helper.invalidElements, ($elements) ->
         $element = $('input', $elements).first()
 
-        result = validator.validateElement($element)
+        result = validator.validateOne($element)
         helper.expectInValid(result)
 
         expect($element.hasClass(validator.config.classes.error)).toBe true

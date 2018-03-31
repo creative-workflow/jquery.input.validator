@@ -136,7 +136,7 @@ class @InputValidator
     if @config.validateOnFocusOut
       $elements
         .off("focusout.#{@ns}")
-        .on("focusout.#{@ns}", (e) => @validateElement(e.target))
+        .on("focusout.#{@ns}", (e) => @validateOne(e.target))
 
     if @config.removeHintOnFocus
       $elements
@@ -147,24 +147,24 @@ class @InputValidator
       $elements
         .off("keyup.#{@ns}")
         .on("keyup.#{@ns}", (e) =>
-          @validateElement(e.target) if $(e.target).data('invalid')
+          @validateOne(e.target) if $(e.target).data('invalid')
         )
 
     if @config.validateOnClick
       $elements
         .off("click.#{@ns}")
-        .on("click.#{@ns}", (e) => @validateElement(e.target))
+        .on("click.#{@ns}", (e) => @validateOne(e.target))
 
   validate: (context = null) =>
     errors = []
     $elements = @elementsFor(context)
     for element in $elements.get()
-      result = @validateElement(element)
+      result = @validateOne(element)
       errors = errors.concat(result) if result != true
 
     return if errors.length then errors else true
 
-  validateElement: (element) =>
+  validateOne: (element) =>
     $element = $(element)
     value    = $element.val()
     errors   = []

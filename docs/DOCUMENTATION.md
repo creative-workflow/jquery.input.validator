@@ -4,21 +4,21 @@
 ```js
 
 // validators by input type
-validator.validateElement('<input type="email"  value"invalid">');
-validator.validateElement('<input type="number" value"invalid">');
-validator.validateElement('<input type="tel"    value"invalid">');
+validator.validateOne('<input type="email"  value"invalid">');
+validator.validateOne('<input type="number" value"invalid">');
+validator.validateOne('<input type="tel"    value"invalid">');
 
 // validators by html5 attributes
-validator.validateElement('<input type="text" required>')
-validator.validateElement('<input type="text" minlength="1" maxlength="3">')
-validator.validateElement('<input type="text" pattern="^\\d*$">')
+validator.validateOne('<input type="text" required>')
+validator.validateOne('<input type="text" minlength="1" maxlength="3">')
+validator.validateOne('<input type="text" pattern="^\\d*$">')
 
 // validators by data attributes
-validator.validateElement('<input type="text" data-rule-decimal="true">')
-validator.validateElement('<input type="text" data-has-class="hello" class="hello">')
+validator.validateOne('<input type="text" data-rule-decimal="true">')
+validator.validateOne('<input type="text" data-has-class="hello" class="hello">')
 
 // add a custom message for an validator
-validator.validateElement('<input type="text" required data-msg-required="required!">')
+validator.validateOne('<input type="text" required data-msg-required="required!">')
 ```
 
 ##### Custom valiators
@@ -39,7 +39,7 @@ var validator = $('body').iValidator({
 
 var invalidHelloWorld = '<input type="text" "data-rule-hello-world"="hello world" value="not hello world">';
 
-errors = validator.validateElement(invalidHelloWorld);
+errors = validator.validateOne(invalidHelloWorld);
 
 if(errors !== false)
   console.log('hello world from custom validator =)');
@@ -48,12 +48,12 @@ if(errors !== false)
 
 ### Methods
 ##### validate(context = null)
-  * calls `validateElement` for every element in `context`
+  * calls `validateOne` for every element in `context`
   * `returns` array of erros or `true`
   * `context` can be a html string or jquery object
   * default `context` is the element you attached the `iValidator` to
 
-##### validateElement(element)
+##### validateOne(element)
   * `element` can be string or jquery object
   * `returns` array of erros or `true`
   * applies the `rules` on the element, this means:
