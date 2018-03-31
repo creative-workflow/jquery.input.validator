@@ -27,6 +27,6 @@
     "jquery-3": "jquery#3"
   },
   "dependencies": {
-    "jquery": "jquery>=1.10"
+    "jquery": ">=1.10.2"
   }
 }
