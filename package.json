@@ -1,6 +1,6 @@
 {
   "name": "jquery.input.validator",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "This jquery plugin helps to handle html input validation. It uses strict html attributes to map the validation rules and is easy extendable.",
   "main": "dist/jquery.input.validator.js",
   "repository": {
