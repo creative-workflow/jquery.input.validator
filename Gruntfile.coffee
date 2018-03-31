@@ -150,7 +150,7 @@ module.exports = (grunt) ->
   grunt.registerTask 'release:git:prepare', (n) ->
     semver = grunt.option('tag')
     execAndReturn("git add ./dist ./bower.json ./package.json")
-    execAndReturn("git commit -m 'dist v#{semver}'")
+    execAndReturn("git commit --allow-empty -m 'dist v#{semver}'")
     execAndReturn("git tag -a #{semver} -m #{semver}")
 
   grunt.registerTask 'release:git:push', (n) ->
