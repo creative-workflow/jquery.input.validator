@@ -26,6 +26,7 @@ Install globally grunt-cli using the following command:
 Browse to the project root directory and install the dev dependencies:
 
     $ npm install
+    $ bower install
 
 Check your installation with:
 
@@ -57,4 +58,3 @@ The following [Grunt](http://gruntjs.com/getting-started) tasks are available:
   * [Readme](../README.md)
   * [Documentation](DOCUMENTATION.md)
   * [Changelog](CHANGELOG.md)
-  * [Contributing](CONTRIBUTING.md)

@@ -26,27 +26,27 @@ Insert the following dependencies into your html file:
 ## Examples
 ### Local pattern
 ```js
-$('form').inputValidator({
+$('form').ivalidator({
   // custom configuration goes here
 });
 
 // validate all inputs in your form
-var result = $('form').inputValidator().validate();
+var result = $('form').iValidator().validate();
 if( result === true )
   console.log('all inputs valid');
 
 // reset error hints
-$('form').inputValidator().reset();
+$('form').iValidator().reset();
 
 // validate element
-$('form').inputValidator().validateElement(
+$('form').iValidator().validateElement(
                                     '<input type="email" value"invalid">'
                                   );
 ```
 
 ### Gobal pattern
 ```js
-var validator = $('body').inputValidator({
+var validator = $('body').iValidator({
   // custom configuration goes here
 });
 

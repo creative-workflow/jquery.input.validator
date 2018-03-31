@@ -29,3 +29,8 @@
 
 ##### 1.0.0
   * initial
+
+### Resources
+  * [Readme](../README.md)
+  * [Documentation](DOCUMENTATION.md)
+  * [Contributing](CONTRIBUTING.md)

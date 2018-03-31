@@ -225,6 +225,5 @@ I think there is potential to implement this more elegant: [Contributing](CONTRI
 
 ### Resources
   * [Readme](../README.md)
-  * [Documentation](DOCUMENTATION.md)
   * [Changelog](CHANGELOG.md)
   * [Contributing](CONTRIBUTING.md)

@@ -34,8 +34,7 @@
     "lint": "grunt lint",
     "test-all": "grunt test-all",
     "build": "grunt build",
-    "release": "grunt release",
-    "postinstall": "bower install"
+    "release": "grunt release"
   },
   "keywords": [
     "jquery-plugin",
