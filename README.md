@@ -1,10 +1,14 @@
 # jquery.input.validator [![Build Status](https://travis-ci.org/creative-workflow/jquery.input.validator.svg?branch=master)](https://travis-ci.org/creative-workflow/jquery.input.validator) [![Contribute](https://img.shields.io/badge/Contribution-Open-brightgreen.svg)](CONTRIBUTING.md) [![Beerpay](https://beerpay.io/creative-workflow/jquery.input.validator/badge.svg?style=flat)](https://beerpay.io/creative-workflow/jquery.input.validator)
 
-[![NPM](https://nodei.co/npm/jquery.input.validator.png)](https://nodei.co/npm/jquery.input.validator/)
+This [jquery](https://jquery.com) plugin helps to handle html input validation.
 
-This module helps to handle input validation based on standard html attributes.
+It uses strict html attributes to map the validation rules.
+
+It has a high test coverage and all test builds run on jquery version >=1.10, >=2 and >=3
 
 It is inspired by [jquery-validation](https://jqueryvalidation.org/) but has much less complexity, more comfort and is easy adjustable for complex setups.
+
+Read more in the [Documentation](docs/DOCUMENTATION.md).
 
 _Note: early stage_
 
@@ -18,174 +22,87 @@ bower install jquery.input.validator
 npm install jquery.input.validator
 
 ```    
+## Integration
+Insert the following dependencies into you html file:
+```html
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="[path_to_your_bower_components]/jquery.input.validator/dist/jquery.input.validator.min.js">
+```
 
-## Usage
-### javascript
+## Examples
+### Local pattern
 ```js
-validator = $('body').inputValidator({
-  ...
+$('form').inputValidator({
+  // configuration goes here
 });
 
-errors = $('form').inputValidator().validate()
-$('form').inputValidator().reset()
+// validate all inputs in our form
+var errors = $('form').inputValidator().validate();
+if( !errors.length )
+  console.log('all inputs valid');
 
-errors = validator.validate($('form'))
+// reset error hints
+$('form').inputValidator().reset();
+
+// validate element
+$('form').inputValidator().validateElement(
+                                    '<input type="email" value"invalid">'
+                                  );
+```
+
+### Gobal pattern
+```js
+var validator = $('body').inputValidator({
+  // configuration goes here
+});
+
+// validate all inputs in our form
+var errors = validator.validate($('form'));
+if(errors.length)
+  console.log('all inputs valid');
+
+// reset the error messages
 validator.reset($('form'))
-
-errors = validator.validateElement('<input type="email" value"invalid">')
-errors = validator.validateElement('<input type="number" value"invalid">')
-errors = validator.validateElement('<input type="tel" value"invalid">')
-errors = validator.validateElement('<input type="text" required>')
-errors = validator.validateElement('<input type="text" minlength="1" maxlength="3">')
-
-errors = validator.validateElement('<input type="text" data-rule-decimal="true">')
-errors = validator.validateElement('<input type="text" data-rule-pattern="true" pattern="blub[\\d*]" value="blub23" >')
-errors = validator.validateElement('<input type="text" data-has-class="hello" class="hello">')
-
-errors = validator.validateElement('<input type="text" required data-msg-required="required!">')
-
-// TODO: write docs
-```
-It also exposes the class `InputValidator` for manual instantiating.
-
-### Configuration
-####
-```coffee
-  validateOnFocusOut: true
-  validateOnKeyUp: false
-  validateOnClick: false
-
-  focusInvalidElement: true
-  removeHintOnFocus: false
-
-  selectors:
-    elements: 'input, textarea, select'
-    ignore: ':hidden'
-
-  classes:
-    error: 'error'
-    valid: 'valid'
-    hint:  'error-hint'
-
-  pattern:
-    decimal: /^[\d\.]*$/
-    number: /^\d*$/
-    tel: /^[0-9/\-\+\s\(\)]*$/
-    email: /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
-
-  rules:
-    minlength: (validator, $element, value) ->
-      return true unless $element.attr('minlength')
-      ('' + value).length >= parseInt($element.attr('minlength'), 10)
-
-    maxlength: (validator, $element, value) ->
-      return true unless $element.attr('maxlength')
-      ('' + value).length <= parseInt($element.attr('maxlength'), 10)
-
-    required: (validator, $element, value) ->
-      return true unless $element.attr('required')
-      return false if value == undefined || value == null
-      return !!value.length if typeof(value) in ['string', 'array' ]
-      !!value
-
-    number: (validator, $element, value) ->
-      return true if $element.attr('type') != 'number' || !(''+value).length
-      validator.config.pattern.number.test(value)
-
-    tel: (validator, $element, value) ->
-      return true if $element.attr('type') != 'tel' || !(''+value).length
-      validator.config.pattern.tel.test(value)
-
-    email: (validator, $element, value) ->
-      return true if $element.attr('type') != 'email' || !(''+value).length
-      validator.config.pattern.email.test(value)
-
-    pattern: (validator, $element, value) ->
-      return true if !$element.attr('pattern') || !(''+value).length
-      (''+value).match($element.attr('pattern'))
-
-    hasClass: (validator, $element, value) ->
-      return true unless $element.data('rule-has-class')
-      $element.hasClass($element.data('rule-has-class'))
-
-    decimal: (validator, $element, value) ->
-      return true unless $element.data('rule-decimal') || !(''+value).length
-      validator.config.pattern.decimal.test(value)
-
-  messages:
-    generic:   'invalid'
-    email:     'invalid email'
-    tel:       'invalid phone number'
-    number:    'invalid number'
-    minlength: 'to short'
-    maxlength: 'to long'
-    required:  'required'
-    hasClass:  'missing class'
-
-  handler:
-    onValid:   null
-    onInvalid: null
-    onReset:   null
-    onBuildErrorElement: (validator, $element, value, errors) ->
-      $("<label class='#{validator.config.classes.hint}' " +
-        "for='#{$element.attr('id')}'></label>")
-
 ```
 
+### Builtin validators
+Validators are triggered from one or more attributes on an input element.
+```js
+
+// validators by input type
+validator.validateElement('<input type="email"  value"invalid">');
+validator.validateElement('<input type="number" value"invalid">');
+validator.validateElement('<input type="tel"    value"invalid">');
+
+// validators by html5 attributes
+validator.validateElement('<input type="text" required>')
+validator.validateElement('<input type="text" minlength="1" maxlength="3">')
+validator.validateElement('<input type="text" pattern="^\\d*$">')
+
+// validators by data attributes
+validator.validateElement('<input type="text" data-rule-decimal="true">')
+validator.validateElement('<input type="text" data-has-class="hello" class="hello">')
+
+// add a custom message for an validator
+validator.validateElement('<input type="text" required data-msg-required="required!">')
+```
 
 ### Dependencies
-  * [jquery](https://jquery.com) (>=v1.1, >=2, >=3)
+  * [jquery](https://jquery.com) >=1.10.0 (also tested width >=2, >=3)
 
 ### Resources
-  * https://github.com/creative-workflow/jquery.input.validator
-  * https://travis-ci.org/creative-workflow/jquery.input.validator
-  * https://codeclimate.com/github/creative-workflow/jquery.input.validator
-  * http://bower.io/search/?q=jquery.input.validator
+  * [Documentation](docs/DOCUMENTATION.md)
+  * [Changelog](docs/CHANGELOG.md)
+  * [Contributing](docs/CONTRIBUTING.md)
 
-### Development
-#### Setup
-  * `npm install`
-  * `bower install`
-  * `npm run test`
-
-#### Run tests and linter
-  * `npm run lint`
-  * `npm run test`
-  * `npm run test-all-jquery-versions`
-
-#### Generate build
-  * `npm run build`
+### Services
+  * [on github.com](https://github.com/creative-workflow/jquery.input.validator)
+  * [on bower.io](http://bower.io/search/?q=jquery.input.validator)
+  * [on npmjs.org](https://www.npmjs.com/package/jquery.input.validator)
+  * [build status](https://travis-ci.org/creative-workflow/jquery.input.validator)
 
 ### Authors
-
   [Tom Hanoldt](https://www.tomhanoldt.info)
-
-## Changelog
-### 1.0.4
-  * test for automated releases
-
-### 1.0.3
-  * refactor `onBuildErrorHint`
-  * clear input events before attaching
-  * add tests for jquery>=1.10, >=2, >=3
-  * more automations tasks
-  * introduce test helper
-  * refactor specs
-
-### 1.0.2
-  * fix error hint
-  * change rule ordering
-
-### 1.0.1
-  * readme
-
-### 1.0.0
-  * initial
-
-# Contributing
-
-Check out the [Contributing Guidelines](CONTRIBUTING.md)
-
 
 ## Support on Beerpay
 Hey dude! Help me out for a couple of :beers:!

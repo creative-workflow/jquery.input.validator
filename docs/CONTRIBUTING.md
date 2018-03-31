@@ -52,3 +52,9 @@ The following [Grunt](http://gruntjs.com/getting-started) tasks are available:
   * `grunt release --tag=x.x.x`   # creates a fresh `dist/` folder
   * ...or `npm run release -- --tag=x.x.x` works also
 ```
+
+### Resources
+  * [Readme](../README.md)
+  * [Documentation](DOCUMENTATION.md)
+  * [Changelog](CHANGELOG.md)
+  * [Contributing](CONTRIBUTING.md)
