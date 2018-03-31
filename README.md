@@ -62,6 +62,7 @@ validator.reset($('form'));
 ### Builtin validators
 Validators are triggered from one or more attributes on an input element.
 ```js
+var validator = $('body').iValidator();
 
 // validators by input type
 validator.validateOne('<input type="email"  value"invalid">');
@@ -81,13 +82,16 @@ validator.validateOne('<input type="text" data-has-class="hello" class="hello">'
 validator.validateOne('<input type="text" required data-msg-required="required!">');
 ```
 
-### Dependencies
-  * [jquery](https://jquery.com) >=1.10.0 (also tested width >=2, >=3)
+# Customize it all :hearts:
+All implementation specific logic can be replaced via config (see [Documentation](docs/DOCUMENTATION.md)).
 
-### Resources
+# Resources
   * [Documentation](docs/DOCUMENTATION.md)
   * [Changelog](docs/CHANGELOG.md)
   * [Contributing](docs/CONTRIBUTING.md)
+
+### Dependencies
+  * [jquery](https://jquery.com) >=1.10.0 (also tested width >=2, >=3)
 
 ### Services
   * [on github.com](https://github.com/creative-workflow/jquery.input.validator)
