@@ -5,6 +5,16 @@ helper.printJqueryVersion = ->
 
 helper.printJqueryVersion()
 
+helper.validElements = [
+  {type: 'email' , value: 'tom@creative-workflow.berlin' },
+  {type: 'number', value: 42, required: true}
+]
+
+helper.invalidElements = [
+  {type: 'email' , value: 'tomcreative-workflow.berlin' },
+  {type: 'number', required: true}
+]
+
 helper.appendAndCallback = (content, callback) ->
   if typeof(content) != 'string'
     $content = helper.generateElements(content)

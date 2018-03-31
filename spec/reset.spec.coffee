@@ -4,19 +4,9 @@ describe 'jquery.input.validator', ->
   helper    = jasmine.helper
   validator = $('body').inputValidator()
 
-  validElements = [
-    {type: 'email' , value: 'tom@creative-workflow.berlin' },
-    {type: 'number', value: 42, required: true}
-  ]
-
-  invalidElements = [
-    {type: 'email' , value: 'tomcreative-workflow.berlin' },
-    {type: 'number', required: true}
-  ]
-
   describe "reset", ->
     it 'resets the validated elements', ->
-      helper.appendAndCallback(invalidElements, ($elements) ->
+      helper.appendAndCallback(helper.invalidElements, ($elements) ->
         $elements.inputValidator()
 
         errors = $elements.inputValidator().validate()
@@ -29,7 +19,7 @@ describe 'jquery.input.validator', ->
       )
 
     it 'resets the validated adhoc elements', ->
-      helper.appendAndCallback(invalidElements, ($elements) ->
+      helper.appendAndCallback(helper.invalidElements, ($elements) ->
         errors = validator.validate($elements)
 
         helper.expectInValid(errors)
@@ -41,7 +31,7 @@ describe 'jquery.input.validator', ->
 
   describe "resetElement", ->
     it 'resets the validated elements', ->
-      helper.appendAndCallback(invalidElements, ($elements) ->
+      helper.appendAndCallback(helper.invalidElements, ($elements) ->
         $element = $('input', $elements).first()
         errors = validator.validateElement($element)
 

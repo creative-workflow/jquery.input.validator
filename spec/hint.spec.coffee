@@ -6,19 +6,9 @@ describe 'jquery.input.validator', ->
 
   hintSelector  = ".#{validator.config.classes.hint}"
 
-  validElements = [
-    {type: 'email' , value: 'tom@creative-workflow.berlin' },
-    {type: 'number', value: 42, required: true}
-  ]
-
-  invalidElements = [
-    {type: 'email' , value: 'tomcreative-workflow.berlin' },
-    {type: 'number', required: true}
-  ]
-
   describe "hint", ->
     it 'gets added to invalid inputs', ->
-      helper.appendAndCallback(invalidElements, ($elements) ->
+      helper.appendAndCallback(helper.invalidElements, ($elements) ->
         $element = $('input', $elements).first()
 
         expect($(hintSelector, $elements).length).toBe 0
@@ -30,7 +20,7 @@ describe 'jquery.input.validator', ->
 
     describe "reset", ->
       it 'gets removed if input gets valid', ->
-        helper.appendAndCallback(invalidElements, ($elements) ->
+        helper.appendAndCallback(helper.invalidElements, ($elements) ->
           expect($(hintSelector, $elements).length).toBe 0
 
           validator.validate($elements)
@@ -41,7 +31,7 @@ describe 'jquery.input.validator', ->
         )
 
     it 'shows the default message', ->
-      helper.appendAndCallback(invalidElements, ($elements) ->
+      helper.appendAndCallback(helper.invalidElements, ($elements) ->
         $input = $('input', $elements).first()
 
         validator.validateElement($input)

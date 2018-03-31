@@ -78,11 +78,12 @@ module.exports = (grunt) ->
           flatten: false
           expand: false
         files:
-          'build/spec/helper.js':          'spec/helper.coffee'
-          'build/spec/controller.spec.js': 'spec/controller.spec.coffee'
-          'build/spec/hint.spec.js':       'spec/hint.spec.coffee'
-          'build/spec/reset.spec.js':      'spec/reset.spec.coffee'
-          'build/spec/rules.spec.js':      'spec/rules.spec.coffee'
+          'build/spec/helper.js':             'spec/helper.coffee'
+          'build/spec/validation.spec.js':    'spec/validation.spec.coffee'
+          'build/spec/hint.spec.js':          'spec/hint.spec.coffee'
+          'build/spec/reset.spec.js':         'spec/reset.spec.coffee'
+          'build/spec/rules_builtin.spec.js': 'spec/rules_builtin.spec.coffee'
+          'build/spec/rules_custom.spec.js':  'spec/rules_custom.spec.coffee'
 
     coffeelint:
       app:
@@ -129,13 +130,6 @@ module.exports = (grunt) ->
             "bower_components/jquery-3/dist/jquery.min.js"
             "bower_components/jasmine-jquery/lib/jasmine-jquery.js"
           ]
-
-    watch:
-      options: livereload: true
-      files: '{src,spec}/*.coffee'
-      tasks: 'test'
-
-
 
   # Loading dependencies
   for key of grunt.file.readJSON('package.json').devDependencies
