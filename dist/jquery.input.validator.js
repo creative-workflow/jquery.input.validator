@@ -156,7 +156,7 @@
       this.init = bind(this.init, this);
       this.config = this.constructor.config;
       this.ns = 'inputvalidator';
-      this.version = '1.0.5';
+      this.version = '1.0.6';
       this.init(config);
     }
 
