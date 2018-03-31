@@ -117,40 +117,59 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'default',  [ 'test' ]
 
+
   # automated release creation (build, push, tag, npm publish)
-  grunt.registerTask 'release', (n) ->
-    # check if tag given
+  execAndReturn = (cmd, print=true) ->
+    console.log "exec: #{cmd}" if print
+    execSync(cmd).toString()
+
+  grunt.registerTask 'release:check:option:tag', (n) ->
     unless grunt.option('tag')
       grunt.fail.fatal "\n\n\tmissing argument '--tag' (--tag=1.x.x)\n\n"
 
-    semver = grunt.option('tag')
-
+  grunt.registerTask 'release:check:git:status', (n) ->
     # check if repo clean
-    # git_status = execSync('git status').toString()
-    # if git_status.indexOf('working tree clean') == -1
-    #   grunt.fail.fatal "\n\n\tuncomitted changes, use 'git status'\n\n"
+    git_status = execAndReturn('git status')
+    if git_status.indexOf('working tree clean') == -1
+      grunt.fail.fatal "\n\n\tuncomitted changes, use 'git status'\n\n"
 
+  grunt.registerTask 'release:check:git:tag', (n) ->
+    semver = grunt.option('tag')
     # check if tag exists (will print the semver version if present)
-    git_tag_list = execSync("git tag -l #{semver}").toString()
+    git_tag_list = execAndReturn("git tag -l #{semver}", false)
     if git_tag_list.indexOf(semver) != -1
       grunt.fail.fatal "\n\n\ttag '#{semver}' already exists\n\n"
 
+  grunt.registerTask 'release:config:update', (n) ->
+    semver = grunt.option('tag')
     # pre checks ok
-    console.log "\n\nINFO: creating release #{semver}\n\n"
+    console.log "info: creating release #{semver}"
+    # this will be used from task replace and some others
     grunt.config('pkg.version', semver)
 
-    # build dist
-    grunt.task.run('build')
+  grunt.registerTask 'release:git:prepare', (n) ->
+    semver = grunt.option('tag')
+    execAndReturn("git add ./dist ./bower.json ./package.json")
+    execAndReturn("git commit -m 'dist v#{semver}'")
+    execAndReturn("git tag -a #{semver} -m #{semver}")
 
-    # git add/commit/tag dist files
-    execSync("git add ./dist ./bower.json ./package.json")
-    execSync("git commit -m 'dist v#{semver}'").toString()
-    execSync("git tag -a #{semver} -m #{semver}")
+  grunt.registerTask 'release:git:push', (n) ->
+    git_push = execAndReturn("git push && git push --tags")
+    if git_push.indexOf('failed to push') != -1
+      grunt.fail.fatal "\n\n\tcan not push, aborting\n\n"
 
-    # git push
-    # git_push = execSync("git push && git push --tags").toString()
-    # if git_push.indexOf('failed to push') != -1
-    #   grunt.fail.fatal "\n\n\tcan not push, aborting\n\n"
+  grunt.registerTask 'release:npm:publish', (n) ->
+    execSync("npm publish")
 
-    # npm publish
-    # execSync("npm publish")
+  grunt.registerTask 'release', [
+    'release:check:option:tag'
+    'release:check:git:status'
+    'release:check:git:tag'
+
+    'release:config:update'
+    'build'
+    'release:git:prepare'
+
+    'release:git:push'
+    'release:npm:publish'
+  ]
