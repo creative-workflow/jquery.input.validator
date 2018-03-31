@@ -4,7 +4,7 @@ This [jquery](https://jquery.com) plugin helps to handle **html input validation
 
 It is inspired by [jquery-validation](https://jqueryvalidation.org/) but has **less complexity**, **more comfort** and is easy adjustable for complex setups. Read more in the [Documentation](docs/DOCUMENTATION.md).
 
-It has a high test coverage and is **tested width jquery >1.10, >2 and >3**
+It has a high test coverage and is **tested with jquery >1.10, >2 and >3**
 
 ## Installation
 ```bash
@@ -91,7 +91,7 @@ All implementation specific logic can be replaced via config (see [Documentation
   * [Contributing](docs/CONTRIBUTING.md)
 
 ### Dependencies
-  * [jquery](https://jquery.com) >=1.10.0 (also tested width >=2, >=3)
+  * [jquery](https://jquery.com) >=1.10.0 (also tested with >=2, >=3)
 
 ### Services
   * [on github.com](https://github.com/creative-workflow/jquery.input.validator)
