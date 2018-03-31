@@ -129,7 +129,7 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'release:check:git:status', (n) ->
     # check if repo clean
-    git_status = execAndReturn('git status')
+    git_status = execAndReturn('git status', false)
     if git_status.indexOf('working tree clean') == -1
       grunt.fail.fatal "\n\n\tuncomitted changes, use 'git status'\n\n"
 
