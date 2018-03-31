@@ -24,7 +24,7 @@ validator.validateOne('<input type="text" required data-msg-required="required!"
 ##### Custom valiators
 ```js
 var validator = $('body').iValidator({
-  rules:{
+  rules: {
     helloWorld: function(validator, $element, value){
       if(!$element.data('rule-hello-world'))
         return true;
@@ -32,7 +32,7 @@ var validator = $('body').iValidator({
       return value == $element.data('rule-hello-world');
     }      
   },
-  messages:{
+  messages: {
     helloWorld: 'this is not "hello world"'    
   }
 });
@@ -40,10 +40,9 @@ var validator = $('body').iValidator({
 var invalidHelloWorld = '<input type="text" data-rule-hello-world="hello world" value="not hello world">';
 $('body').append(invalidHelloWorld);
 
-errors = validator.validateOne(invalidHelloWorld);
-
-if(errors !== false)
-  console.log('hello world from custom validator =)');
+var result = validator.validateOne(invalidHelloWorld);
+if(result !== true)
+  console.log('invalid hello world from custom validator =)');
 
 ```
 
