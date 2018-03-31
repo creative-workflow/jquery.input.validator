@@ -108,62 +108,62 @@ pattern:
   tel:     /^[0-9/\-\+\s\(\)]*$/
   email:   /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
 
-  rules:
-    minlength: (validator, $element, value) ->
-      return true unless $element.attr('minlength')
-      ('' + value).length >= parseInt($element.attr('minlength'), 10)
+messages:
+  generic:   'invalid'
+  email:     'invalid email'
+  tel:       'invalid phone number'
+  number:    'invalid number'
+  minlength: 'to short'
+  maxlength: 'to long'
+  required:  'required'
+  hasClass:  'missing class'
 
-    maxlength: (validator, $element, value) ->
-      return true unless $element.attr('maxlength')
-      ('' + value).length <= parseInt($element.attr('maxlength'), 10)
+rules:
+  minlength: (validator, $element, value) ->
+    return true unless $element.attr('minlength')
+    ('' + value).length >= parseInt($element.attr('minlength'), 10)
 
-    required: (validator, $element, value) ->
-      return true unless $element.attr('required')
-      return false if value == undefined || value == null
-      return !!value.length if typeof(value) in ['string', 'array' ]
-      !!value
+  maxlength: (validator, $element, value) ->
+    return true unless $element.attr('maxlength')
+    ('' + value).length <= parseInt($element.attr('maxlength'), 10)
 
-    number: (validator, $element, value) ->
-      return true if $element.attr('type') != 'number' || !(''+value).length
-      validator.config.pattern.number.test(value)
+  required: (validator, $element, value) ->
+    return true unless $element.attr('required')
+    return false if value == undefined || value == null
+    return !!value.length if typeof(value) in ['string', 'array' ]
+    !!value
 
-    tel: (validator, $element, value) ->
-      return true if $element.attr('type') != 'tel' || !(''+value).length
-      validator.config.pattern.tel.test(value)
+  number: (validator, $element, value) ->
+    return true if $element.attr('type') != 'number' || !(''+value).length
+    validator.config.pattern.number.test(value)
 
-    email: (validator, $element, value) ->
-      return true if $element.attr('type') != 'email' || !(''+value).length
-      validator.config.pattern.email.test(value)
+  tel: (validator, $element, value) ->
+    return true if $element.attr('type') != 'tel' || !(''+value).length
+    validator.config.pattern.tel.test(value)
 
-    pattern: (validator, $element, value) ->
-      return true if !$element.attr('pattern') || !(''+value).length
-      (''+value).match($element.attr('pattern'))
+  email: (validator, $element, value) ->
+    return true if $element.attr('type') != 'email' || !(''+value).length
+    validator.config.pattern.email.test(value)
 
-    hasClass: (validator, $element, value) ->
-      return true unless $element.data('rule-has-class')
-      $element.hasClass($element.data('rule-has-class'))
+  pattern: (validator, $element, value) ->
+    return true if !$element.attr('pattern') || !(''+value).length
+    (''+value).match($element.attr('pattern'))
 
-    decimal: (validator, $element, value) ->
-      return true unless $element.data('rule-decimal') || !(''+value).length
-      validator.config.pattern.decimal.test(value)
+  hasClass: (validator, $element, value) ->
+    return true unless $element.data('rule-has-class')
+    $element.hasClass($element.data('rule-has-class'))
 
-  messages:
-    generic:   'invalid'
-    email:     'invalid email'
-    tel:       'invalid phone number'
-    number:    'invalid number'
-    minlength: 'to short'
-    maxlength: 'to long'
-    required:  'required'
-    hasClass:  'missing class'
+  decimal: (validator, $element, value) ->
+    return true unless $element.data('rule-decimal') || !(''+value).length
+    validator.config.pattern.decimal.test(value)
 
-  handler:
-    onValid:   null
-    onInvalid: null
-    onReset:   null
-    onBuildErrorHint: (validator, $element, value, errors) ->
-      $("<label class='#{validator.config.classes.hint}' " +
-        "for='#{$element.attr('id')}'></label>")
+handler:
+  onValid:   null
+  onInvalid: null
+  onReset:   null
+  onBuildErrorHint: (validator, $element, value, errors) ->
+    $("<label class='#{validator.config.classes.hint}' " +
+      "for='#{$element.attr('id')}'></label>")
 ```
 
 
