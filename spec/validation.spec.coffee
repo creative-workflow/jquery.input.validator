@@ -25,13 +25,13 @@ describe 'jquery.input.validator', ->
         )
 
     describe "global pattern", ->
-      it 'validates valid adhoc', ->
+      it 'validates valid', ->
         helper.appendAndCallback(helper.validElements, ($elements) ->
           errors = validator.validate($elements)
           helper.expectValid(errors)
         )
 
-      it 'validates invalid adhoc', ->
+      it 'validates invalid', ->
         helper.appendAndCallback(helper.invalidElements, ($elements) ->
           errors = validator.validate($elements)
           helper.expectInValid(errors)

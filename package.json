@@ -1,7 +1,7 @@
 {
   "name": "jquery.input.validator",
   "version": "1.0.5",
-  "description": "This module helps to handle input validation based on standard html attributes.",
+  "description": "This jquery plugin helps to handle html input validation. It uses strict html attributes to map the validation rules and is easy extendable.",
   "main": "dist/jquery.input.validator.js",
   "repository": {
     "type": "git",
@@ -32,9 +32,10 @@
   "scripts": {
     "test": "grunt test",
     "lint": "grunt lint",
-    "test-all-jquery-versions": "grunt test-all",
+    "test-all": "grunt test-all",
     "build": "grunt build",
-    "release": "grunt release"
+    "release": "grunt release",
+    "postinstall": "bower install"
   },
   "keywords": [
     "jquery-plugin",
