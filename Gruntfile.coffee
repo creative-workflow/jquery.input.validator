@@ -16,7 +16,6 @@ module.exports = (grunt) ->
 
       push: ['push', 'origin', 'master']
 
-
     replace:
       dist:
         options:
@@ -113,6 +112,7 @@ module.exports = (grunt) ->
             "bower_components/jquery-1/jquery.min.js"
             "bower_components/jasmine-jquery-legacy/lib/jasmine-jquery.js"
           ]
+
       jquery2:
         src: 'dist/jquery.input.validator.js'
         options:
@@ -133,10 +133,11 @@ module.exports = (grunt) ->
           ]
 
   # Loading dependencies
-  for key of grunt.file.readJSON('package.json').devDependencies
-    if key != 'grunt' and key.indexOf('grunt') == 0
-      grunt.loadNpmTasks key
+  require('load-grunt-tasks')(grunt, {
+    pattern: ['grunt-*', '!grunt-template-jasmine-istanbul']
+  })
 
+  # register tasks
   grunt.registerTask 'compile', [ 'clean', 'includes', 'coffee', 'replace:dist', 'replace:bower' ]
 
   grunt.registerTask 'lint', [ 'includes', 'coffeelint' ]

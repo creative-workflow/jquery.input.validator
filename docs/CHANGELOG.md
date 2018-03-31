@@ -1,5 +1,9 @@
 # Changelog
 
+##### 1.0.8
+  * refactor
+  * many more tests
+
 ##### 1.0.7
   * rename `validateElement` to `validateOne`
 

@@ -4,6 +4,8 @@ describe 'jquery.input.validator', ->
   helper    = jasmine.helper
   validator = $('body').iValidator()
 
+  invalidClass  = validator.config.classes.invalid
+
   describe "reset", ->
     it 'resets the validated elements', ->
       helper.appendAndCallback(helper.invalidElements, ($elements) ->
@@ -13,9 +15,9 @@ describe 'jquery.input.validator', ->
 
         helper.expectInValid(result)
 
-        expect($('input', $elements).hasClass(validator.config.classes.error)).toBe true
+        expect($('input', $elements).hasClass(invalidClass)).toBe true
         $elements.iValidator().reset()
-        expect($('input', $elements).hasClass(validator.config.classes.error)).toBe false
+        expect($('input', $elements).hasClass(invalidClass)).toBe false
       )
 
     it 'resets the validated adhoc elements', ->
@@ -24,9 +26,9 @@ describe 'jquery.input.validator', ->
 
         helper.expectInValid(result)
 
-        expect($('input', $elements).hasClass(validator.config.classes.error)).toBe true
+        expect($('input', $elements).hasClass(invalidClass)).toBe true
         validator.reset($elements)
-        expect($('input', $elements).hasClass(validator.config.classes.error)).toBe false
+        expect($('input', $elements).hasClass(invalidClass)).toBe false
       )
 
   describe "resetElement", ->
@@ -37,7 +39,7 @@ describe 'jquery.input.validator', ->
         result = validator.validateOne($element)
         helper.expectInValid(result)
 
-        expect($element.hasClass(validator.config.classes.error)).toBe true
+        expect($element.hasClass(invalidClass)).toBe true
         validator.resetElement($element)
-        expect($element.hasClass(validator.config.classes.error)).toBe false
+        expect($element.hasClass(invalidClass)).toBe false
       )

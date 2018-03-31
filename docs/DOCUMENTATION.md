@@ -86,29 +86,27 @@ if(errors !== false)
 
 ### Configuration
 ```coffee
+options:
   validateOnFocusOut: true
-  validateOnKeyUp: false
-  validateOnClick: false
+  validateOnKeyUp:    true    # validates only on key up when invalid before
+  validateOnClick:    false
+  focusOnInvalid:     true
+  removeHintOnFocus:  false
 
-  focusInvalidElement: true
-  removeHintOnFocus: false
+selectors:
+  elements: 'input, textarea, select'
+  ignore:   ':hidden'
 
-  selectors:
-    elements: 'input, textarea, select'
-    ignore: ':hidden'
+classes:
+  invalid: 'invalid'
+  valid:   'valid'
+  hint:    'error-hint'
 
-  classes:
-    error: 'error'
-    valid: 'valid'
-    hint:  'error-hint'
-
-  pattern:
-    decimal: /^[\d\.]*$/
-    number: /^\d*$/
-    tel: /^[0-9/\-\+\s\(\)]*$/
-    # coffeelint: disable
-    email: /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
-    # coffeelint: enable
+pattern:
+  decimal: /^[\d\.]*$/
+  number:  /^\d*$/
+  tel:     /^[0-9/\-\+\s\(\)]*$/
+  email:   /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
 
   rules:
     minlength: (validator, $element, value) ->
