@@ -158,7 +158,7 @@
       this.init = bind(this.init, this);
       this.config = this.constructor.config;
       this.ns = 'ivalidator';
-      this.version = '1.0.7';
+      this.version = '1.0.8';
       this.init(config);
     }
 
