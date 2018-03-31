@@ -26,7 +26,7 @@ Insert the following dependencies into your html file:
 ## Examples
 ### Local pattern
 ```js
-$('form').ivalidator({
+$('form').iValidator({
   // custom configuration goes here
 });
 
