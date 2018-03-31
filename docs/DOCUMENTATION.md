@@ -37,7 +37,8 @@ var validator = $('body').iValidator({
   }
 });
 
-var invalidHelloWorld = '<input type="text" "data-rule-hello-world"="hello world" value="not hello world">';
+var invalidHelloWorld = '<input type="text" data-rule-hello-world="hello world" value="not hello world">';
+$('body').append(invalidHelloWorld);
 
 errors = validator.validateOne(invalidHelloWorld);
 
@@ -182,13 +183,13 @@ Have a look at the current implementation:
 
   onBuildErrorHintIntern: (validator, $element, value, errors) ->
     error = errors[0]
-    $hint = $element.data('inputvalidator-hint')
+    $hint = $element.data('ivalidator-hint')
 
     unless $hint
       $hint = validator.config.handler.onBuildErrorHint(validator,
         $element, value, errors)
 
-      $element.data('inputvalidator-hint', $hint)
+      $element.data('ivalidator-hint', $hint)
               .after($hint)
 
     $hint.html(error.message)
@@ -212,8 +213,8 @@ Have a look at the current implementation:
   onResetIntern: (validator, $element) ->
     classes = validator.config.classes
     $element.removeClass("#{classes.error} #{classes.valid}")
-    $($element.data('inputvalidator-hint')).remove()
-    $element.data('inputvalidator-hint', null)
+    $($element.data('ivalidator-hint')).remove()
+    $element.data('ivalidator-hint', null)
     validator.config.handler.onReset?(validator, $element)
     validator.config.handler.onValid?(validator, $element, value, errors)
 
