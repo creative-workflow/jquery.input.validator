@@ -6,11 +6,11 @@ if typeof jQuery != 'undefined'
   jQuery.fn.iValidator = (config = null) ->
     $this = $(this)
 
-    instance = $this.data('inputvalidator')
+    instance = $this.data('ivalidator')
 
     if !instance || config != null
-      $this.data('inputvalidator', new InputValidator($this, config || {}))
+      $this.data('ivalidator', new InputValidator($this, config || {}))
 
-      instance = $this.data('inputvalidator')
+      instance = $this.data('ivalidator')
 
     return instance

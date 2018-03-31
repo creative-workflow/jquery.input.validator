@@ -1,27 +1,27 @@
 class @InputValidator
   @config =
-    validateOnFocusOut: true
-    validateOnKeyUp: false
-    validateOnClick: false
-
-    focusInvalidElement: true
-    removeHintOnFocus: false
+    options:
+      validateOnFocusOut: true
+      validateOnKeyUp:    true    # validates only on key up when invalid before
+      validateOnClick:    false
+      focusOnInvalid:     true
+      removeHintOnFocus:  false
 
     selectors:
       elements: 'input, textarea, select'
-      ignore: ':hidden'
+      ignore:   ':hidden'
 
     classes:
-      error: 'error'
-      valid: 'valid'
-      hint:  'error-hint'
+      invalid: 'invalid'
+      valid:   'valid'
+      hint:    'error-hint'
 
     pattern:
       decimal: /^[\d\.]*$/
-      number: /^\d*$/
-      tel: /^[0-9/\-\+\s\(\)]*$/
+      number:  /^\d*$/
+      tel:     /^[0-9/\-\+\s\(\)]*$/
       # coffeelint: disable
-      email: /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
+      email:   /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
       # coffeelint: enable
 
     rules:
@@ -83,13 +83,13 @@ class @InputValidator
 
       onBuildErrorHintIntern: (validator, $element, value, errors) ->
         error = errors[0]
-        $hint = $element.data('inputvalidator-hint')
+        $hint = $element.data('ivalidator-hint')
 
         unless $hint
           $hint = validator.config.handler.onBuildErrorHint(validator,
             $element, value, errors)
 
-          $element.data('inputvalidator-hint', $hint)
+          $element.data('ivalidator-hint', $hint)
                   .after($hint)
 
         $hint.html(error.message)
@@ -97,13 +97,13 @@ class @InputValidator
       onValidIntern: (validator, $element, value, errors) ->
         classes = validator.config.classes
         validator.config.handler.onResetIntern(validator, $element)
-        $element.removeClass(classes.error)
+        $element.removeClass(classes.invalid)
                 .addClass(classes.valid)
 
       onInvalidIntern: (validator, $element, value, errors) ->
         classes = validator.config.classes
         $element.removeClass(classes.valid)
-                .addClass(classes.error)
+                .addClass(classes.invalid)
 
         validator.config.handler.onBuildErrorHintIntern(
           validator, $element, value, errors)
@@ -112,15 +112,15 @@ class @InputValidator
 
       onResetIntern: (validator, $element) ->
         classes = validator.config.classes
-        $element.removeClass("#{classes.error} #{classes.valid}")
-        $($element.data('inputvalidator-hint')).remove()
-        $element.data('inputvalidator-hint', null)
+        $element.removeClass("#{classes.invalid} #{classes.valid}")
+        $($element.data('ivalidator-hint')).remove()
+        $element.data('ivalidator-hint', null)
         validator.config.handler.onReset?(validator, $element)
         validator.config.handler.onValid?(validator, $element, value, errors)
 
   constructor: (@context, config={}) ->
     @config  = @constructor.config
-    @ns      = 'inputvalidator'
+    @ns      = 'ivalidator'
     @version = '__VERSION__'
     @init(config)
 
@@ -133,24 +133,24 @@ class @InputValidator
     context ?= @context
 
     $elements = @elementsFor(context)
-    if @config.validateOnFocusOut
+    if @config.options.validateOnFocusOut
       $elements
         .off("focusout.#{@ns}")
         .on("focusout.#{@ns}", (e) => @validateOne(e.target))
 
-    if @config.removeHintOnFocus
+    if @config.options.removeHintOnFocus
       $elements
         .off("focus.#{@ns}")
         .on("focus.#{@ns}", (e) => @resetElement(e.target))
 
-    if @config.validateOnKeyUp
+    if @config.options.validateOnKeyUp
       $elements
         .off("keyup.#{@ns}")
         .on("keyup.#{@ns}", (e) =>
           @validateOne(e.target) if $(e.target).data('invalid')
         )
 
-    if @config.validateOnClick
+    if @config.options.validateOnClick
       $elements
         .off("click.#{@ns}")
         .on("click.#{@ns}", (e) => @validateOne(e.target))
@@ -185,7 +185,7 @@ class @InputValidator
 
     $element.data('invalid', true)
     @config.handler.onInvalidIntern(@, $element, value, errors)
-    $element.first().focus() if @config.focusInvalidElement
+    $element.first().focus() if @config.options.focusOnInvalid
     errors
 
   reset: (context = null) =>

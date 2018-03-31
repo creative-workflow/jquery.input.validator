@@ -4,17 +4,19 @@
 
   this.InputValidator = (function() {
     InputValidator.config = {
-      validateOnFocusOut: true,
-      validateOnKeyUp: false,
-      validateOnClick: false,
-      focusInvalidElement: true,
-      removeHintOnFocus: false,
+      options: {
+        validateOnFocusOut: true,
+        validateOnKeyUp: true,
+        validateOnClick: false,
+        focusOnInvalid: true,
+        removeHintOnFocus: false
+      },
       selectors: {
         elements: 'input, textarea, select',
         ignore: ':hidden'
       },
       classes: {
-        error: 'error',
+        invalid: 'invalid',
         valid: 'valid',
         hint: 'error-hint'
       },
@@ -107,10 +109,10 @@
         onBuildErrorHintIntern: function(validator, $element, value, errors) {
           var $hint, error;
           error = errors[0];
-          $hint = $element.data('inputvalidator-hint');
+          $hint = $element.data('ivalidator-hint');
           if (!$hint) {
             $hint = validator.config.handler.onBuildErrorHint(validator, $element, value, errors);
-            $element.data('inputvalidator-hint', $hint).after($hint);
+            $element.data('ivalidator-hint', $hint).after($hint);
           }
           return $hint.html(error.message);
         },
@@ -118,21 +120,21 @@
           var classes;
           classes = validator.config.classes;
           validator.config.handler.onResetIntern(validator, $element);
-          return $element.removeClass(classes.error).addClass(classes.valid);
+          return $element.removeClass(classes.invalid).addClass(classes.valid);
         },
         onInvalidIntern: function(validator, $element, value, errors) {
           var base, classes;
           classes = validator.config.classes;
-          $element.removeClass(classes.valid).addClass(classes.error);
+          $element.removeClass(classes.valid).addClass(classes.invalid);
           validator.config.handler.onBuildErrorHintIntern(validator, $element, value, errors);
           return typeof (base = validator.config.handler).onInvalid === "function" ? base.onInvalid(validator, $element, value, errors) : void 0;
         },
         onResetIntern: function(validator, $element) {
           var base, base1, classes;
           classes = validator.config.classes;
-          $element.removeClass(classes.error + " " + classes.valid);
-          $($element.data('inputvalidator-hint')).remove();
-          $element.data('inputvalidator-hint', null);
+          $element.removeClass(classes.invalid + " " + classes.valid);
+          $($element.data('ivalidator-hint')).remove();
+          $element.data('ivalidator-hint', null);
           if (typeof (base = validator.config.handler).onReset === "function") {
             base.onReset(validator, $element);
           }
@@ -155,7 +157,7 @@
       this.prepareElements = bind(this.prepareElements, this);
       this.init = bind(this.init, this);
       this.config = this.constructor.config;
-      this.ns = 'inputvalidator';
+      this.ns = 'ivalidator';
       this.version = '1.0.7';
       this.init(config);
     }
@@ -180,21 +182,21 @@
         context = this.context;
       }
       $elements = this.elementsFor(context);
-      if (this.config.validateOnFocusOut) {
+      if (this.config.options.validateOnFocusOut) {
         $elements.off("focusout." + this.ns).on("focusout." + this.ns, (function(_this) {
           return function(e) {
             return _this.validateOne(e.target);
           };
         })(this));
       }
-      if (this.config.removeHintOnFocus) {
+      if (this.config.options.removeHintOnFocus) {
         $elements.off("focus." + this.ns).on("focus." + this.ns, (function(_this) {
           return function(e) {
             return _this.resetElement(e.target);
           };
         })(this));
       }
-      if (this.config.validateOnKeyUp) {
+      if (this.config.options.validateOnKeyUp) {
         $elements.off("keyup." + this.ns).on("keyup." + this.ns, (function(_this) {
           return function(e) {
             if ($(e.target).data('invalid')) {
@@ -203,7 +205,7 @@
           };
         })(this));
       }
-      if (this.config.validateOnClick) {
+      if (this.config.options.validateOnClick) {
         return $elements.off("click." + this.ns).on("click." + this.ns, (function(_this) {
           return function(e) {
             return _this.validateOne(e.target);
@@ -258,7 +260,7 @@
       }
       $element.data('invalid', true);
       this.config.handler.onInvalidIntern(this, $element, value, errors);
-      if (this.config.focusInvalidElement) {
+      if (this.config.options.focusOnInvalid) {
         $element.first().focus();
       }
       return errors;
@@ -312,10 +314,10 @@
         config = null;
       }
       $this = $(this);
-      instance = $this.data('inputvalidator');
+      instance = $this.data('ivalidator');
       if (!instance || config !== null) {
-        $this.data('inputvalidator', new InputValidator($this, config || {}));
-        instance = $this.data('inputvalidator');
+        $this.data('ivalidator', new InputValidator($this, config || {}));
+        instance = $this.data('ivalidator');
       }
       return instance;
     };
