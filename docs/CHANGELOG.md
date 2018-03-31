@@ -1,5 +1,8 @@
 # Changelog
 
+##### 1.0.9
+  * cleanup tasks and dependencies
+
 ##### 1.0.8
   * refactor
   * many more tests

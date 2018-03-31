@@ -1,59 +1,31 @@
-'use strict'
+execSync = require('child_process').execSync
 
 module.exports = (grunt) ->
+
+  # configuration
   grunt.initConfig
+    # pkg
     pkg: grunt.file.readJSON 'package.json'
 
-    git:
-      add: ['add', '.']
-
-      commit:
-        options:
-          message: 'dist v<%= pkg.version %>'
-
-      createTag: ['tag', '-a', '<%= pkg.version %>', '-m', '<%= pkg.version %>']
-      pushTag: ['push', 'origin', 'master', 'tag', '<%= pkg.version %>']
-
-      push: ['push', 'origin', 'master']
-
-    replace:
+    # coffee
+    coffee:
       dist:
-        options:
-          patterns: [{
-            match: /__VERSION__/
-            replacement: '<%= pkg.version %>'
-          }]
-        files: [{
-          expand: true
-          flatten: true
-          src: [
-            'dist/**/*'
-          ]
-          dest: 'dist/'
-        }]
-      bower:
-        options:
-          patterns: [
-            {
-              match: /"version": "([^"]*)"/
-              replacement: '"version": "<%= pkg.version %>"'
-            },
-            {
-              match: /"description": "([^"]*)"/
-              replacement: '"description": "<%= pkg.description %>"'
-            }
-          ]
-        files: [{
-          expand: true
-          flatten: true
-          src: [
-            'bower.json'
-            'package.json'
-          ]
-          dest: './'
-        }]
+        options: { sourceMap: true }
+        files:
+          'dist/jquery.input.validator.js': 'build/jquery.input.validator.coffee'
 
+      specs:
+        options: { sourceMap: true, flatten: false, expand: false }
+        files:
+          'build/spec/helper.js':             'spec/helper.coffee'
+          'build/spec/validation.spec.js':    'spec/validation.spec.coffee'
+          'build/spec/trigger.spec.js':       'spec/trigger.spec.coffee'
+          'build/spec/hint.spec.js':          'spec/hint.spec.coffee'
+          'build/spec/reset.spec.js':         'spec/reset.spec.coffee'
+          'build/spec/rules_builtin.spec.js': 'spec/rules_builtin.spec.coffee'
+          'build/spec/rules_custom.spec.js':  'spec/rules_custom.spec.coffee'
 
+    # includes
     includes:
       files:
         src: ['src/jquery.input.validator.coffee']
@@ -65,43 +37,39 @@ module.exports = (grunt) ->
           silent: true
           banner: '# <% includes.files.dest %>'
 
-    coffee:
-      dist:
-        options:
-          sourceMap: true
-        files:
-          'dist/jquery.input.validator.js': 'build/jquery.input.validator.coffee'
-      specs:
-        options:
-          sourceMap: true
-          flatten: false
-          expand: false
-        files:
-          'build/spec/helper.js':             'spec/helper.coffee'
-          'build/spec/validation.spec.js':    'spec/validation.spec.coffee'
-          'build/spec/trigger.spec.js':       'spec/trigger.spec.coffee'
-          'build/spec/hint.spec.js':          'spec/hint.spec.coffee'
-          'build/spec/reset.spec.js':         'spec/reset.spec.coffee'
-          'build/spec/rules_builtin.spec.js': 'spec/rules_builtin.spec.coffee'
-          'build/spec/rules_custom.spec.js':  'spec/rules_custom.spec.coffee'
-
+    # coffeelint
     coffeelint:
-      app:
-        [ 'src/*.coffee' ]
+      lint: [ 'src/*.coffee' ]
 
+    # uglyfy
     uglify:
       options:
         banner: '/*! <%= pkg.name %> v<%= pkg.version %> | <%= pkg.license %> */\n'
       build:
         files: 'dist/jquery.input.validator.min.js': 'dist/jquery.input.validator.js'
 
-    exec:
-      npm_publish: 'npm publish'
+    # replace
+    replace:
+      dist:
+        files: [{ src: ['dist/**/*'],  dest: 'dist/', expand: true, flatten: true }]
+        options:
+          patterns: [{ match: /__VERSION__/, replacement: '<%= pkg.version %>' }]
 
+      bower:
+        files: [{ src: [ 'bower.json', 'package.json' ], dest: './', expand: true, flatten: true }]
+        options:
+          patterns: [{
+              match: /"version": "([^"]*)"/,     replacement: '"version": "<%= pkg.version %>"'
+            },{
+              match: /"description": "([^"]*)"/, replacement: '"description": "<%= pkg.description %>"'
+          }]
+
+    # clean
     clean:
       build: 'build'
       dist:  'dist'
 
+    # jasmine
     jasmine:
       jquery1:
         src: 'dist/jquery.input.validator.js'
@@ -109,18 +77,19 @@ module.exports = (grunt) ->
           specs:   'build/spec/*spec.js'
           helpers: 'build/spec/*helper.js'
           vendor: [
+            # yes this is ugly, but npm doesnt support multiple versions of a package
             "bower_components/jquery-1/jquery.min.js"
-            "bower_components/jasmine-jquery-legacy/lib/jasmine-jquery.js"
+            "node_modules/jasmine-jquery/lib/jasmine-jquery.js"
           ]
-
       jquery2:
         src: 'dist/jquery.input.validator.js'
         options:
           specs:   'build/spec/*spec.js'
           helpers: 'build/spec/*helper.js'
           vendor: [
-            "bower_components/jquery-2/dist/jquery.min.js"
-            "bower_components/jasmine-jquery/lib/jasmine-jquery.js"
+            # yes this is ugly, but npm doesnt support multiple versions of a package
+            "bower_components/jquery-1/jquery.min.js"
+            "node_modules/jasmine-jquery/lib/jasmine-jquery.js"
           ]
       jquery3:
         src: 'dist/jquery.input.validator.js'
@@ -128,8 +97,9 @@ module.exports = (grunt) ->
           specs:   'build/spec/*spec.js'
           helpers: 'build/spec/*helper.js'
           vendor: [
-            "bower_components/jquery-3/dist/jquery.min.js"
-            "bower_components/jasmine-jquery/lib/jasmine-jquery.js"
+            # yes this is ugly, but npm doesnt support multiple versions of a package
+            "bower_components/jquery-1/jquery.min.js"
+            "node_modules/jasmine-jquery/lib/jasmine-jquery.js"
           ]
 
   # Loading dependencies
@@ -138,34 +108,49 @@ module.exports = (grunt) ->
   })
 
   # register tasks
-  grunt.registerTask 'compile', [ 'clean', 'includes', 'coffee', 'replace:dist', 'replace:bower' ]
+  grunt.registerTask 'compile',  [ 'run-once:clean', 'run-once:includes', 'run-once:coffee', 'run-once:replace' ]
 
-  grunt.registerTask 'lint', [ 'includes', 'coffeelint' ]
+  grunt.registerTask 'test',     [ 'run-once:compile', 'jasmine:jquery3' ]
+  grunt.registerTask 'test-all', [ 'run-once:compile', 'jasmine'         ]
 
-  grunt.registerTask 'test',     [ 'compile', 'jasmine:jquery3' ]
-  grunt.registerTask 'test-all', [ 'compile', 'jasmine'         ]
+  grunt.registerTask 'build',    [ 'run-once:compile', 'run-once:coffeelint', 'test-all', 'uglify' ]
 
-  grunt.registerTask 'build', [ 'compile', 'lint', 'test-all', 'uglify' ]
+  grunt.registerTask 'default',  [ 'test' ]
 
-  grunt.registerTask 'git-release-tag', [ 'git:createTag', 'git:pushTag']
-  grunt.registerTask 'git-push-dist',   [ 'git:add', 'git:commit', 'git:push', 'git-release-tag']
-
-  grunt.registerTask 'default', [ 'test' ]
-
-
-  # the version is comes from package.json:version
+  # automated release creation (build, push, tag, npm publish)
   grunt.registerTask 'release', (n) ->
+    # check if tag given
     unless grunt.option('tag')
-      console.error "\n\nERROR: missing argument '--tag' (--tag=1.x.x)\n\n"
-      return
+      grunt.fail.fatal "\n\n\tmissing argument '--tag' (--tag=1.x.x)\n\n"
 
-    git_status = require('child_process').execSync('git status').toString()
+    semver = grunt.option('tag')
+
+    # check if repo clean
+    git_status = execSync('git status').toString()
     if git_status.indexOf('working tree clean') == -1
-      console.error "\n\nERROR: uncomitted changes, use 'git status'\n\n"
-      return
+      grunt.fail.fatal "\n\n\tuncomitted changes, use 'git status'\n\n"
 
-    console.log "\n\nINFO: creating release #{grunt.option('tag')}\n\n"
+    # check if tag exists
+    git_tag_list = execSync("git tag -l #{semver}").toString()
+    if git_tag_list == semver
+      grunt.fail.fatal "\n\n\ttag #{semver} already exists\n\n"
 
-    grunt.config('pkg.version', grunt.option('tag'))
+    # pre checks ok
+    console.log "\n\nINFO: creating release #{semver}\n\n"
+    grunt.config('pkg.version', semver)
 
-    grunt.task.run([ 'build', 'git-push-dist', 'exec:npm_publish' ]);
+    # build dist
+    grunt.task.run('build')
+
+    # git add/commit/tag dist files
+    execSync("git add ./dist ./bower.json ./package.json")
+    execSync("git commit -m 'dist v#{semver}'").toString()
+    execSync("git tag -a #{semver} -m #{semver}")
+
+    # git push
+    # git_push = execSync("git push && git push --tags").toString()
+    # if git_push.indexOf('failed to push') != -1
+    #   grunt.fail.fatal "\n\n\tcan not push, aborting\n\n"
+
+    # npm publish
+    # execSync("npm publish")

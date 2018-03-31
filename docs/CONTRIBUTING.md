@@ -33,7 +33,7 @@ Check your installation with:
     $ npm run test
 
 
-### Grunt tasks
+### Tasks
 The following [Grunt](http://gruntjs.com/getting-started) tasks are available:
 
 ##### Run tests and linter
@@ -51,7 +51,7 @@ The following [Grunt](http://gruntjs.com/getting-started) tasks are available:
 ##### Automatic release
 ```bash
   * `grunt release --tag=x.x.x`   # creates a fresh `dist/` folder
-  * ...or `npm run release -- --tag=x.x.x` works also
+  * or `npm run release -- --tag=x.x.x` works also
 ```
 
 ### Resources
