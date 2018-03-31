@@ -159,9 +159,10 @@ class @InputValidator
     errors = []
     $elements = @elementsFor(context)
     for element in $elements.get()
-      errors = errors.concat(@validateElement(element))
+      result = @validateElement(element)
+      errors = errors.concat(result) if result != true
 
-    errors
+    return if errors.length then errors else true
 
   validateElement: (element) =>
     $element = $(element)
@@ -177,15 +178,14 @@ class @InputValidator
           value:   value
         }
 
-    if errors.length > 0
-      $element.data('invalid', true)
-      @config.handler.onInvalidIntern(@, $element, value, errors)
-      $element.first().focus() if @config.focusInvalidElement
-
-    else
+    if errors.length == 0
       $element.data('invalid', false)
       @config.handler.onValidIntern(@, $element, value, errors)
+      return true
 
+    $element.data('invalid', true)
+    @config.handler.onInvalidIntern(@, $element, value, errors)
+    $element.first().focus() if @config.focusInvalidElement
     errors
 
   reset: (context = null) =>

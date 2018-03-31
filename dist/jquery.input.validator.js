@@ -213,7 +213,7 @@
     };
 
     InputValidator.prototype.validate = function(context) {
-      var $elements, element, errors, i, len, ref;
+      var $elements, element, errors, i, len, ref, result;
       if (context == null) {
         context = null;
       }
@@ -222,9 +222,16 @@
       ref = $elements.get();
       for (i = 0, len = ref.length; i < len; i++) {
         element = ref[i];
-        errors = errors.concat(this.validateElement(element));
+        result = this.validateElement(element);
+        if (result !== true) {
+          errors = errors.concat(result);
+        }
       }
-      return errors;
+      if (errors.length) {
+        return errors;
+      } else {
+        return true;
+      }
     };
 
     InputValidator.prototype.validateElement = function(element) {
@@ -244,15 +251,15 @@
           });
         }
       }
-      if (errors.length > 0) {
-        $element.data('invalid', true);
-        this.config.handler.onInvalidIntern(this, $element, value, errors);
-        if (this.config.focusInvalidElement) {
-          $element.first().focus();
-        }
-      } else {
+      if (errors.length === 0) {
         $element.data('invalid', false);
         this.config.handler.onValidIntern(this, $element, value, errors);
+        return true;
+      }
+      $element.data('invalid', true);
+      this.config.handler.onInvalidIntern(this, $element, value, errors);
+      if (this.config.focusInvalidElement) {
+        $element.first().focus();
       }
       return errors;
     };
@@ -299,7 +306,7 @@
 
   if (typeof jQuery !== 'undefined') {
     $ = jQuery;
-    jQuery.fn.inputValidator = function(config) {
+    jQuery.fn.iValidator = function(config) {
       var $this, instance;
       if (config == null) {
         config = null;

@@ -23,7 +23,7 @@ validator.validateElement('<input type="text" required data-msg-required="requir
 
 ##### Custom valiators
 ```js
-var validator = $('body').inputValidator({
+var validator = $('body').iValidator({
   rules:{
     helloWorld: function(validator, $element, value){
       if(!$element.data('rule-hello-world'))
@@ -41,7 +41,7 @@ var invalidHelloWorld = '<input type="text" "data-rule-hello-world"="hello world
 
 errors = validator.validateElement(invalidHelloWorld);
 
-if(errors.length)
+if(errors !== false)
   console.log('hello world from custom validator =)');
 
 ```
@@ -49,13 +49,13 @@ if(errors.length)
 ### Methods
 ##### validate(context = null)
   * calls `validateElement` for every element in `context`
-  * `returns` array of erros or `false`
+  * `returns` array of erros or `true`
   * `context` can be a html string or jquery object
-  * default `context` is the element you attached the `inputValidator` to
+  * default `context` is the element you attached the `iValidator` to
 
 ##### validateElement(element)
   * `element` can be string or jquery object
-  * `returns` array of erros or `false`
+  * `returns` array of erros or `true`
   * applies the `rules` on the element, this means:
     * adds handler for `keyup` and `focusout` etc. (detaches the old one)
     * adds class `valid` or `invalid` to element
@@ -66,7 +66,7 @@ if(errors.length)
 ##### reset(context = null) =>
   * calls `resetElement` for every element in `context`
   * `context` can be a html string or jquery object
-  * default `context` is the element you attached the `inputValidator` to
+  * default `context` is the element you attached the `iValidator` to
 
 ##### resetElement(element)
   * `element` can be string or jquery object
@@ -78,7 +78,7 @@ if(errors.length)
   * uses `@config.selectors.elements`
   * ignores `@config.selectors.ignore`
   * `context` can be a html string or jquery object
-  * default `context` is the element you attached the `inputValidator` to
+  * default `context` is the element you attached the `iValidator` to
 
 ##### messageFor(name)
   * looks in `@config.messages` for a message for `name`

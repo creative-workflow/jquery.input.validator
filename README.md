@@ -1,16 +1,10 @@
 # jquery.input.validator [![Build Status](https://travis-ci.org/creative-workflow/jquery.input.validator.svg?branch=master)](https://travis-ci.org/creative-workflow/jquery.input.validator) [![Contribute](https://img.shields.io/badge/Contribution-Open-brightgreen.svg)](CONTRIBUTING.md) [![Beerpay](https://beerpay.io/creative-workflow/jquery.input.validator/badge.svg?style=flat)](https://beerpay.io/creative-workflow/jquery.input.validator)
 
-This [jquery](https://jquery.com) plugin helps to handle html input validation.
+This [jquery](https://jquery.com) plugin helps to handle **html input validation** by applying rules to elements **based on html attributes**.
 
-It uses strict html attributes to map the validation rules.
+It is inspired by [jquery-validation](https://jqueryvalidation.org/) but has **less complexity**, **more comfort** and is easy adjustable for complex setups. Read more in the [Documentation](docs/DOCUMENTATION.md).
 
-It has a high test coverage and all test builds run on jquery version >=1.10, >=2 and >=3
-
-It is inspired by [jquery-validation](https://jqueryvalidation.org/) but has much less complexity, more comfort and is easy adjustable for complex setups.
-
-Read more in the [Documentation](docs/DOCUMENTATION.md).
-
-_Note: early stage_
+It has a high test coverage and is **tested width jquery >1.10, >2 and >3**
 
 ## Installation
 ```bash
@@ -23,7 +17,7 @@ npm install jquery.input.validator
 
 ```    
 ## Integration
-Insert the following dependencies into you html file:
+Insert the following dependencies into your html file:
 ```html
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="[path_to_your_bower_components]/jquery.input.validator/dist/jquery.input.validator.min.js">
@@ -33,12 +27,12 @@ Insert the following dependencies into you html file:
 ### Local pattern
 ```js
 $('form').inputValidator({
-  // configuration goes here
+  // custom configuration goes here
 });
 
-// validate all inputs in our form
-var errors = $('form').inputValidator().validate();
-if( !errors.length )
+// validate all inputs in your form
+var result = $('form').inputValidator().validate();
+if( result === true )
   console.log('all inputs valid');
 
 // reset error hints
@@ -53,16 +47,16 @@ $('form').inputValidator().validateElement(
 ### Gobal pattern
 ```js
 var validator = $('body').inputValidator({
-  // configuration goes here
+  // custom configuration goes here
 });
 
-// validate all inputs in our form
-var errors = validator.validate($('form'));
-if(errors.length)
+// validate all inputs in your form
+var result = validator.validate($('form'));
+if( result === true )
   console.log('all inputs valid');
 
 // reset the error messages
-validator.reset($('form'))
+validator.reset($('form'));
 ```
 
 ### Builtin validators
@@ -75,16 +69,16 @@ validator.validateElement('<input type="number" value"invalid">');
 validator.validateElement('<input type="tel"    value"invalid">');
 
 // validators by html5 attributes
-validator.validateElement('<input type="text" required>')
-validator.validateElement('<input type="text" minlength="1" maxlength="3">')
-validator.validateElement('<input type="text" pattern="^\\d*$">')
+validator.validateElement('<input type="text" required>');
+validator.validateElement('<input type="text" minlength="1" maxlength="3">');
+validator.validateElement('<input type="text" pattern="^\\d*$">');
 
 // validators by data attributes
-validator.validateElement('<input type="text" data-rule-decimal="true">')
-validator.validateElement('<input type="text" data-has-class="hello" class="hello">')
+validator.validateElement('<input type="text" data-rule-decimal="true">');
+validator.validateElement('<input type="text" data-has-class="hello" class="hello">');
 
 // add a custom message for an validator
-validator.validateElement('<input type="text" required data-msg-required="required!">')
+validator.validateElement('<input type="text" required data-msg-required="required!">');
 ```
 
 ### Dependencies

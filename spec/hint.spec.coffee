@@ -2,7 +2,7 @@
 describe 'jquery.input.validator', ->
   $         = jQuery
   helper    = jasmine.helper
-  validator = $('body').inputValidator()
+  validator = $('body').iValidator()
 
   hintSelector  = ".#{validator.config.classes.hint}"
 

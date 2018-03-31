@@ -25,11 +25,11 @@ helper.appendAndCallback = (content, callback) ->
   callback($content)
   $content.remove()
 
-helper.expectValid = (errors) ->
-  expect(errors.length == 0).toBe true
+helper.expectValid = (result) ->
+  expect(result).toBe true
 
-helper.expectInValid = (errors) ->
-  expect(errors.length == 0).toBe false
+helper.expectInValid = (result) ->
+  expect(result).not.toBe true
 
 helper.generateElement = (definition) ->
   $("<#{definition.tag || 'input'}/>", definition)

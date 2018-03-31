@@ -2,50 +2,49 @@
 describe 'jquery.input.validator', ->
   $         = jQuery
   helper    = jasmine.helper
-  validator = $('body').inputValidator()
+  validator = $('body').iValidator()
 
   describe "validate", ->
+    it 'returns true on valid', ->
+      helper.appendAndCallback(helper.validElements, ($elements) ->
+        result = $elements.iValidator().validate()
+        expect(result).toBe true
+      )
+
+    it 'returns array of erros on invalid', ->
+      helper.appendAndCallback(helper.invalidElements, ($elements) ->
+        result = $elements.iValidator().validate()
+        expect(result.length > 0).toBe true
+      )
+
     describe "local pattern", ->
       it 'validates valid', ->
         helper.appendAndCallback(helper.validElements, ($elements) ->
-          errors = $elements.inputValidator().validate()
-          helper.expectValid(errors)
+          result = $elements.iValidator().validate()
+          helper.expectValid(result)
         )
 
       it 'validates invalid', ->
         helper.appendAndCallback(helper.invalidElements, ($elements) ->
-          errors = $elements.inputValidator().validate($elements)
-          helper.expectInValid(errors)
+          result = $elements.iValidator().validate($elements)
+          helper.expectInValid(result)
         )
 
-      it 'adds multiple errors', ->
+      it 'adds multiple result', ->
         helper.appendAndCallback(helper.invalidElements, ($elements) ->
-          errors = $elements.inputValidator().validate($elements)
-          expect(errors.length > 1).toBe true
+          result = $elements.iValidator().validate($elements)
+          expect(result.length > 1).toBe true
         )
 
     describe "global pattern", ->
       it 'validates valid', ->
         helper.appendAndCallback(helper.validElements, ($elements) ->
-          errors = validator.validate($elements)
-          helper.expectValid(errors)
+          result = validator.validate($elements)
+          helper.expectValid(result)
         )
 
       it 'validates invalid', ->
         helper.appendAndCallback(helper.invalidElements, ($elements) ->
-          errors = validator.validate($elements)
-          helper.expectInValid(errors)
-        )
-
-    describe "validateOnClick", ->
-      it 'triggers validation on click', ->
-        helper.appendAndCallback(helper.invalidElements, ($elements) ->
-          $elements.inputValidator({
-            validateOnClick: true
-          })
-
-          $trigger = $('input', $elements)
-          expect($trigger.hasClass(validator.config.classes.error)).toBe false
-          $trigger.click()
-          expect($trigger.hasClass(validator.config.classes.error)).toBe true
+          result = validator.validate($elements)
+          helper.expectInValid(result)
         )

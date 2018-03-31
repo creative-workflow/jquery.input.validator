@@ -80,6 +80,7 @@ module.exports = (grunt) ->
         files:
           'build/spec/helper.js':             'spec/helper.coffee'
           'build/spec/validation.spec.js':    'spec/validation.spec.coffee'
+          'build/spec/trigger.spec.js':       'spec/trigger.spec.coffee'
           'build/spec/hint.spec.js':          'spec/hint.spec.coffee'
           'build/spec/reset.spec.js':         'spec/reset.spec.coffee'
           'build/spec/rules_builtin.spec.js': 'spec/rules_builtin.spec.coffee'

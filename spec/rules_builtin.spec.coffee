@@ -1,7 +1,7 @@
 describe 'jquery.input.validator', ->
   $         = jQuery
   helper    = jasmine.helper
-  validator = $('body').inputValidator()
+  validator = $('body').iValidator()
 
   generateAndValidate = (element) ->
     validator.validateElement(

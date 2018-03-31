@@ -1,7 +1,7 @@
 describe 'jquery.input.validator', ->
   $         = jQuery
   helper    = jasmine.helper
-  validator = $('body').inputValidator({
+  validator = $('body').iValidator({
     rules:
       helloWorld: (validator, $element, value) ->
         return true unless $element.data('rule-hello-world')
