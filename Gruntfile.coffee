@@ -126,14 +126,14 @@ module.exports = (grunt) ->
     semver = grunt.option('tag')
 
     # check if repo clean
-    git_status = execSync('git status').toString()
-    if git_status.indexOf('working tree clean') == -1
-      grunt.fail.fatal "\n\n\tuncomitted changes, use 'git status'\n\n"
+    # git_status = execSync('git status').toString()
+    # if git_status.indexOf('working tree clean') == -1
+    #   grunt.fail.fatal "\n\n\tuncomitted changes, use 'git status'\n\n"
 
-    # check if tag exists
+    # check if tag exists (will print the semver version if present)
     git_tag_list = execSync("git tag -l #{semver}").toString()
-    if git_tag_list == semver
-      grunt.fail.fatal "\n\n\ttag #{semver} already exists\n\n"
+    if git_tag_list.indexOf(semver) != -1
+      grunt.fail.fatal "\n\n\ttag '#{semver}' already exists\n\n"
 
     # pre checks ok
     console.log "\n\nINFO: creating release #{semver}\n\n"
