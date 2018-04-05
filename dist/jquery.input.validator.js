@@ -165,6 +165,8 @@
       this.onProcessHints = bind(this.onProcessHints, this);
       this.onInvalid = bind(this.onInvalid, this);
       this.onValid = bind(this.onValid, this);
+      this.shouldBeValidated = bind(this.shouldBeValidated, this);
+      this.isSingle = bind(this.isSingle, this);
       this.messageFor = bind(this.messageFor, this);
       this.elementsFor = bind(this.elementsFor, this);
       this.resetElement = bind(this.resetElement, this);
@@ -174,9 +176,8 @@
       this.prepareElements = bind(this.prepareElements, this);
       this.init = bind(this.init, this);
       this.config = this.constructor.config;
-      this.ns = 'ivalidator';
-      this.version = '1.0.13';
-      this.init(config);
+      this.init(config, this.context);
+      this.version = '1.0.14';
     }
 
     InputValidator.prototype.init = function(config, context) {
@@ -186,8 +187,9 @@
       if (config) {
         this.config = jQuery.extend(true, {}, this.config, config);
       }
-      this.prepareElements(context);
-      return this.config;
+      this.elementsSelector = this.config.selectors.elements;
+      this.ns = 'ivalidator';
+      return this.prepareElements(context);
     };
 
     InputValidator.prototype.prepareElements = function(context) {
@@ -311,7 +313,10 @@
       if (context == null) {
         context = this.context;
       }
-      return $(this.config.selectors.elements, context).not(this.config.selectors.ignore);
+      if (this.isSingle(context)) {
+        return $(context);
+      }
+      return $(this.elementsSelector, context).not(this.config.selectors.ignore);
     };
 
     InputValidator.prototype.messageFor = function(name) {
@@ -320,6 +325,14 @@
         return this.config.messages[name];
       }
       return this.config.messages.generic;
+    };
+
+    InputValidator.prototype.isSingle = function(input) {
+      return $(input).is(this.elementsSelector);
+    };
+
+    InputValidator.prototype.shouldBeValidated = function(input) {
+      return $(input).is(this.elementsSelector) && !$(input).is(this.ignoreSelector);
     };
 
     InputValidator.prototype.onValid = function($element) {
