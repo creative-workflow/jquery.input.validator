@@ -81,8 +81,9 @@ if(result !== true)
   * default `context` is the element you attached the `iValidator` to
 
 ##### messageFor(name)
-  * looks in `@config.messages` for a message for `name`
-  * returns `@config.messages.generic` when no message found
+  * 1: look at `@config.messages[name]` for a message
+  * 2: return `@config.messages.generic` as fallback
+  _Note_: Only if a message is present a hint will be generated
 
 ### Configuration
 ```coffee
@@ -100,13 +101,7 @@ selectors:
 classes:
   invalid: 'invalid'
   valid:   'valid'
-  hint:    'error-hint'
-
-pattern:
-  decimal: /^[\d\.]*$/
-  number:  /^\d*$/
-  tel:     /^[0-9/\-\+\s\(\)]*$/
-  email:   /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
+  hint:    'ivalidate-hint' # a hint gets also the valid or invalid class
 
 messages:
   generic:   'invalid'
@@ -117,6 +112,14 @@ messages:
   maxlength: 'to long'
   required:  'required'
   hasClass:  'missing class'
+
+pattern:
+  decimal: /^[\d\.]*$/
+  number:  /^\d*$/
+  tel:     /^[0-9/\-\+\s\(\)]*$/
+  # coffeelint: disable
+  email:   /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
+  # coffeelint: enable
 
 rules:
   minlength: (validator, $element, value) ->
@@ -158,12 +161,42 @@ rules:
     validator.config.pattern.decimal.test(value)
 
 handler:
-  onValid:   null
-  onInvalid: null
-  onReset:   null
-  onBuildErrorHint: (validator, $element, value, errors) ->
-    $("<label class='#{validator.config.classes.hint}' " +
-      "for='#{$element.attr('id')}'></label>")
+  onReset:   null # (validator, $element) ->
+  onValid:   null # (validator, $element) ->
+  onInvalid: null # (validator, $element, errors) ->
+
+  onGetValidMessage: (validator, $element) ->
+    $element.data("msg-valid")
+
+  onGetInvalidMessage: (validator, $element, errors) ->
+    error   = errors[0]
+    message = $element.data("msg-#{error.rule}")
+    message || validator.messageFor(error.rule)
+
+  onBuildHint: (validator, $element, result, message) ->
+    classes    = validator.config.classes
+    hintClass  = classes.hint
+    validClass = if result == true then classes.valid else classes.invalid
+
+    $("<label>", {
+      class: hintClass + ' ' + validClass
+      for:   $element.attr('id')
+    }).html(message)
+
+  onShowHint: (validator, $element, $newHint, $oldHint = null)  ->
+    if $newHint
+      $newHint.hide()
+      $element.after($newHint)
+
+    unless $oldHint
+      $newHint.fadeIn() if $newHint
+      return
+
+    $oldHint.fadeOut(100, =>
+      $newHint.fadeIn(100) if $newHint
+      $oldHint.remove()
+    )
+
 ```
 
 
@@ -173,49 +206,41 @@ It is very easy to override the internal behaviour as all specific logic is also
 Have a look at the current implementation:
 ```coffee
 @config.handler =
-  onValid:   null
-  onInvalid: null
-  onReset:   null
-  onBuildErrorHint: (validator, $element, value, errors) ->
-    $("<label class='#{validator.config.classes.hint}' " +
-      "for='#{$element.attr('id')}'></label>")
+  onReset:   null # (validator, $element) ->
+  onValid:   null # (validator, $element) ->
+  onInvalid: null # (validator, $element, errors) ->
 
-  onBuildErrorHintIntern: (validator, $element, value, errors) ->
-    error = errors[0]
-    $hint = $element.data('ivalidator-hint')
+  onGetValidMessage: (validator, $element) ->
+    $element.data("msg-valid")
 
-    unless $hint
-      $hint = validator.config.handler.onBuildErrorHint(validator,
-        $element, value, errors)
+  onGetInvalidMessage: (validator, $element, errors) ->
+    error   = errors[0]
+    message = $element.data("msg-#{error.rule}")
+    message || validator.messageFor(error.rule)
 
-      $element.data('ivalidator-hint', $hint)
-              .after($hint)
+  onBuildHint: (validator, $element, result, message) ->
+    classes    = validator.config.classes
+    hintClass  = classes.hint
+    validClass = if result == true then classes.valid else classes.invalid
 
-    $hint.html(error.message)
+    $("<label>", {
+      class: hintClass + ' ' + validClass
+      for:   $element.attr('id')
+    }).html(message)
 
-  onValidIntern: (validator, $element, value, errors) ->
-    classes = validator.config.classes
-    validator.config.handler.onResetIntern(validator, $element)
-    $element.removeClass(classes.error)
-            .addClass(classes.valid)
+  onShowHint: (validator, $element, $newHint, $oldHint = null)  ->
+    if $newHint
+      $newHint.hide()
+      $element.after($newHint)
 
-  onInvalidIntern: (validator, $element, value, errors) ->
-    classes = validator.config.classes
-    $element.removeClass(classes.valid)
-            .addClass(classes.error)
+    unless $oldHint
+      $newHint.fadeIn() if $newHint
+      return
 
-    validator.config.handler.onBuildErrorHintIntern(
-      validator, $element, value, errors)
-
-    validator.config.handler.onInvalid?(validator, $element, value, errors)
-
-  onResetIntern: (validator, $element) ->
-    classes = validator.config.classes
-    $element.removeClass("#{classes.error} #{classes.valid}")
-    $($element.data('ivalidator-hint')).remove()
-    $element.data('ivalidator-hint', null)
-    validator.config.handler.onReset?(validator, $element)
-    validator.config.handler.onValid?(validator, $element, value, errors)
+    $oldHint.fadeOut(100, =>
+      $newHint.fadeIn(100) if $newHint
+      $oldHint.remove()
+    )
 
 ```
 

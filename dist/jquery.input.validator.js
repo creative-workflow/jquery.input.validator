@@ -18,7 +18,17 @@
       classes: {
         invalid: 'invalid',
         valid: 'valid',
-        hint: 'error-hint'
+        hint: 'ivalidate-hint'
+      },
+      messages: {
+        generic: 'invalid',
+        email: 'invalid email',
+        tel: 'invalid phone number',
+        number: 'invalid number',
+        minlength: 'to short',
+        maxlength: 'to long',
+        required: 'required',
+        hasClass: 'missing class'
       },
       pattern: {
         decimal: /^[\d\.]*$/,
@@ -89,56 +99,62 @@
           return validator.config.pattern.decimal.test(value);
         }
       },
-      messages: {
-        generic: 'invalid',
-        email: 'invalid email',
-        tel: 'invalid phone number',
-        number: 'invalid number',
-        minlength: 'to short',
-        maxlength: 'to long',
-        required: 'required',
-        hasClass: 'missing class'
-      },
       handler: {
+        onReset: null,
         onValid: null,
         onInvalid: null,
-        onReset: null,
-        onBuildErrorHint: function(validator, $element, value, errors) {
-          return $(("<label class='" + validator.config.classes.hint + "' ") + ("for='" + ($element.attr('id')) + "'></label>"));
+        onGetValidMessage: function(validator, $element) {
+          return $element.data("msg-valid");
         },
-        onBuildErrorHintIntern: function(validator, $element, value, errors) {
-          var $hint, error;
+        onGetInvalidMessage: function(validator, $element, errors) {
+          var error, message;
           error = errors[0];
-          $hint = $element.data('ivalidator-hint');
-          if (!$hint) {
-            $hint = validator.config.handler.onBuildErrorHint(validator, $element, value, errors);
-            $element.data('ivalidator-hint', $hint).after($hint);
+          message = $element.data("msg-" + error.rule);
+          return message || validator.messageFor(error.rule);
+        },
+        onBuildHint: function(validator, $element, result, message) {
+          var classes, hintClass, validClass;
+          classes = validator.config.classes;
+          hintClass = classes.hint;
+          validClass = result === true ? classes.valid : classes.invalid;
+          return $("<label>", {
+            "class": hintClass + ' ' + validClass,
+            "for": $element.attr('id')
+          }).html(message);
+        },
+        onShowHint: function(validator, $element, $newHint, $oldHint) {
+          if ($oldHint == null) {
+            $oldHint = null;
           }
-          return $hint.html(error.message);
-        },
-        onValidIntern: function(validator, $element, value, errors) {
-          var classes;
-          classes = validator.config.classes;
-          validator.config.handler.onResetIntern(validator, $element);
-          return $element.removeClass(classes.invalid).addClass(classes.valid);
-        },
-        onInvalidIntern: function(validator, $element, value, errors) {
-          var base, classes;
-          classes = validator.config.classes;
-          $element.removeClass(classes.valid).addClass(classes.invalid);
-          validator.config.handler.onBuildErrorHintIntern(validator, $element, value, errors);
-          return typeof (base = validator.config.handler).onInvalid === "function" ? base.onInvalid(validator, $element, value, errors) : void 0;
-        },
-        onResetIntern: function(validator, $element) {
-          var base, base1, classes;
-          classes = validator.config.classes;
-          $element.removeClass(classes.invalid + " " + classes.valid);
-          $($element.data('ivalidator-hint')).remove();
-          $element.data('ivalidator-hint', null);
-          if (typeof (base = validator.config.handler).onReset === "function") {
-            base.onReset(validator, $element);
+          if ($newHint) {
+            $newHint.hide();
+            $element.after($newHint);
           }
-          return typeof (base1 = validator.config.handler).onValid === "function" ? base1.onValid(validator, $element, value, errors) : void 0;
+          if (!$oldHint) {
+            if ($newHint) {
+              $newHint.fadeIn();
+            }
+            return;
+          }
+          return $oldHint.fadeOut(100, (function(_this) {
+            return function() {
+              if ($newHint) {
+                $newHint.fadeIn(100);
+              }
+              return $oldHint.remove();
+            };
+          })(this));
+        },
+        onShowHintForTesting: function(validator, $element, $newHint, $oldHint) {
+          if ($oldHint == null) {
+            $oldHint = null;
+          }
+          if ($newHint) {
+            $element.after($newHint);
+          }
+          if ($oldHint) {
+            return $oldHint.remove();
+          }
         }
       }
     };
@@ -148,6 +164,9 @@
       if (config == null) {
         config = {};
       }
+      this.onProcessHints = bind(this.onProcessHints, this);
+      this.onInvalid = bind(this.onInvalid, this);
+      this.onValid = bind(this.onValid, this);
       this.messageFor = bind(this.messageFor, this);
       this.elementsFor = bind(this.elementsFor, this);
       this.resetElement = bind(this.resetElement, this);
@@ -246,7 +265,6 @@
         rule = ref[name];
         if (!rule(this, $element, value)) {
           errors.push({
-            message: $element.data("msg-" + name) || this.messageFor(name),
             element: $element,
             rule: name,
             value: value
@@ -254,15 +272,10 @@
         }
       }
       if (errors.length === 0) {
-        $element.data('invalid', false);
-        this.config.handler.onValidIntern(this, $element, value, errors);
+        this.onValid($element);
         return true;
       }
-      $element.data('invalid', true);
-      this.config.handler.onInvalidIntern(this, $element, value, errors);
-      if (this.config.options.focusOnInvalid) {
-        $element.first().focus();
-      }
+      this.onInvalid($element, errors);
       return errors;
     };
 
@@ -281,7 +294,14 @@
     };
 
     InputValidator.prototype.resetElement = function(element) {
-      return this.config.handler.onResetIntern(this, $(element));
+      var $element, base;
+      $element = $(element);
+      if (typeof (base = this.config.handler).onReset === "function") {
+        base.onReset(this, $element);
+      }
+      $element.removeClass(this.config.classes.invalid + " " + this.config.classes.valid);
+      $($element.data('ivalidator-hint')).remove();
+      return $element.data('ivalidator-hint', null);
     };
 
     InputValidator.prototype.elementsFor = function(context) {
@@ -296,10 +316,45 @@
 
     InputValidator.prototype.messageFor = function(name) {
       var ref;
-      if (!((ref = this.config.messages) != null ? ref[name] : void 0)) {
-        return this.config.messages.generic;
+      if ((ref = this.config.messages) != null ? ref[name] : void 0) {
+        return this.config.messages[name];
       }
-      return this.config.messages[name];
+      return this.config.messages.generic;
+    };
+
+    InputValidator.prototype.onValid = function($element) {
+      var base;
+      $element.data('invalid', false).data('errors', null).removeClass(this.config.classes.invalid).addClass(this.config.classes.valid);
+      this.onProcessHints($element, true);
+      return typeof (base = this.config.handler).onValid === "function" ? base.onValid(this, $element) : void 0;
+    };
+
+    InputValidator.prototype.onInvalid = function($element, errors) {
+      var base;
+      $element.data('invalid', true).data('errors', errors).removeClass(this.config.classes.valid).addClass(this.config.classes.invalid);
+      this.onProcessHints($element, errors);
+      if (typeof (base = this.config.handler).onInvalid === "function") {
+        base.onInvalid(this, $element, errors);
+      }
+      if (this.config.options.focusOnInvalid) {
+        return $element.first().focus();
+      }
+    };
+
+    InputValidator.prototype.onProcessHints = function($element, result) {
+      var $newHint, $oldHint, message;
+      $oldHint = $element.data('ivalidator-hint');
+      $newHint = null;
+      if (result === true) {
+        message = this.config.handler.onGetValidMessage(this, $element);
+      } else {
+        message = this.config.handler.onGetInvalidMessage(this, $element, result);
+      }
+      if (message) {
+        $newHint = this.config.handler.onBuildHint(this, $element, result, message);
+      }
+      $element.data('ivalidator-hint', $newHint);
+      return this.config.handler.onShowHint(this, $element, $newHint, $oldHint);
     };
 
     return InputValidator;

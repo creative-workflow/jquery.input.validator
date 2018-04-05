@@ -19,7 +19,7 @@ describe 'jquery.input.validator', ->
     )
 
   describe "rules", ->
-    describe "add cutom rule", ->
+    describe "add custom rule", ->
       it 'validates valid', ->
         helper.expectValid generateAndValidate(
             { type: 'text', 'data-rule-hello-world': 'hello world', value: 'hello world'}
@@ -38,7 +38,6 @@ describe 'jquery.input.validator', ->
           $input = $('input', $elements).first()
 
           validator.validateOne($input)
-
           $label = $(hintSelector, $elements)
           expect($label.length).toBe 1
           expect($label.text()).toBe 'this is not "hello world"'

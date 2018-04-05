@@ -1,7 +1,8 @@
 # Changelog
 
-##### 1.0.9
-  * cleanup tasks and dependencies
+##### 1.0.12
+  * add valid messages
+  * remove bower dev dependencies
 
 ##### 1.0.8
   * refactor

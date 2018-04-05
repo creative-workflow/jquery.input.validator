@@ -6,6 +6,9 @@ describe 'jquery.input.validator', ->
 
   hintSelector  = ".#{validator.config.classes.hint}"
 
+  # override -> no waiting for dom changes
+  validator.config.handler.onShowHint = validator.config.handler.onShowHintForTesting
+
   describe "hint", ->
     it 'gets added to invalid inputs', ->
       helper.appendAndCallback(helper.invalidElements, ($elements) ->
@@ -55,11 +58,13 @@ describe 'jquery.input.validator', ->
         expect($label.text()).toBe 'hint text'
       )
 
+
     it 'changes the message', ->
       elements = [
         {type: 'email', value:'ab', 'minlength': 3}
       ]
-      helper.appendAndCallback(elements, ($elements) ->
+
+      helper.appendAndCallback(elements, ($elements) =>
         $element = $('input', $elements).first()
 
         validator.validateOne($element)
@@ -69,5 +74,27 @@ describe 'jquery.input.validator', ->
 
         $element.val('not more minlength')
         validator.validateOne($element)
+
+        $label = $(hintSelector, $elements)
         expect($label.text()).toBe validator.config.messages.email
+      )
+
+    it 'show valid message', ->
+      elements = [
+        {type: 'text', value:'ab', 'minlength': 3, 'data-msg-valid': 'OK!'}
+      ]
+
+      helper.appendAndCallback(elements, ($elements) =>
+        $element = $('input', $elements).first()
+
+        validator.validateOne($element)
+
+        $label = $(hintSelector, $elements)
+        expect($label.text()).toBe validator.config.messages.minlength
+
+        $element.val('not more minlength')
+        validator.validateOne($element)
+
+        $label = $(hintSelector, $elements)
+        expect($label.text()).toBe 'OK!'
       )

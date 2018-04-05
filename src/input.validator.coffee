@@ -14,7 +14,17 @@ class @InputValidator
     classes:
       invalid: 'invalid'
       valid:   'valid'
-      hint:    'error-hint'
+      hint:    'ivalidate-hint' # a hint gets also the valid or invalid class
+
+    messages:
+      generic:   'invalid'
+      email:     'invalid email'
+      tel:       'invalid phone number'
+      number:    'invalid number'
+      minlength: 'to short'
+      maxlength: 'to long'
+      required:  'required'
+      hasClass:  'missing class'
 
     pattern:
       decimal: /^[\d\.]*$/
@@ -63,60 +73,49 @@ class @InputValidator
         return true unless $element.data('rule-decimal') || !(''+value).length
         validator.config.pattern.decimal.test(value)
 
-    messages:
-      generic:   'invalid'
-      email:     'invalid email'
-      tel:       'invalid phone number'
-      number:    'invalid number'
-      minlength: 'to short'
-      maxlength: 'to long'
-      required:  'required'
-      hasClass:  'missing class'
-
     handler:
-      onValid:   null
-      onInvalid: null
-      onReset:   null
-      onBuildErrorHint: (validator, $element, value, errors) ->
-        $("<label class='#{validator.config.classes.hint}' " +
-          "for='#{$element.attr('id')}'></label>")
+      onReset:   null # (validator, $element) ->
+      onValid:   null # (validator, $element) ->
+      onInvalid: null # (validator, $element, errors) ->
 
-      onBuildErrorHintIntern: (validator, $element, value, errors) ->
-        error = errors[0]
-        $hint = $element.data('ivalidator-hint')
+      onGetValidMessage: (validator, $element) ->
+        $element.data("msg-valid")
 
-        unless $hint
-          $hint = validator.config.handler.onBuildErrorHint(validator,
-            $element, value, errors)
+      onGetInvalidMessage: (validator, $element, errors) ->
+        error   = errors[0]
+        message = $element.data("msg-#{error.rule}")
+        message || validator.messageFor(error.rule)
 
-          $element.data('ivalidator-hint', $hint)
-                  .after($hint)
+      onBuildHint: (validator, $element, result, message) ->
+        classes    = validator.config.classes
+        hintClass  = classes.hint
+        validClass = if result == true then classes.valid else classes.invalid
 
-        $hint.html(error.message)
+        $("<label>", {
+          class: hintClass + ' ' + validClass
+          for:   $element.attr('id')
+        }).html(message)
 
-      onValidIntern: (validator, $element, value, errors) ->
-        classes = validator.config.classes
-        validator.config.handler.onResetIntern(validator, $element)
-        $element.removeClass(classes.invalid)
-                .addClass(classes.valid)
+      onShowHint: (validator, $element, $newHint, $oldHint = null)  ->
+        if $newHint
+          $newHint.hide()
+          $element.after($newHint)
 
-      onInvalidIntern: (validator, $element, value, errors) ->
-        classes = validator.config.classes
-        $element.removeClass(classes.valid)
-                .addClass(classes.invalid)
+        unless $oldHint
+          $newHint.fadeIn() if $newHint
+          return
 
-        validator.config.handler.onBuildErrorHintIntern(
-          validator, $element, value, errors)
+        $oldHint.fadeOut(100, =>
+          $newHint.fadeIn(100) if $newHint
+          $oldHint.remove()
+        )
 
-        validator.config.handler.onInvalid?(validator, $element, value, errors)
+      onShowHintForTesting: (validator, $element, $newHint, $oldHint = null) ->
+        if $newHint
+          $element.after($newHint)
 
-      onResetIntern: (validator, $element) ->
-        classes = validator.config.classes
-        $element.removeClass("#{classes.invalid} #{classes.valid}")
-        $($element.data('ivalidator-hint')).remove()
-        $element.data('ivalidator-hint', null)
-        validator.config.handler.onReset?(validator, $element)
-        validator.config.handler.onValid?(validator, $element, value, errors)
+        if $oldHint
+          $oldHint.remove()
 
   constructor: (@context, config={}) ->
     @config  = @constructor.config
@@ -134,25 +133,21 @@ class @InputValidator
 
     $elements = @elementsFor(context)
     if @config.options.validateOnFocusOut
-      $elements
-        .off("focusout.#{@ns}")
+      $elements.off("focusout.#{@ns}")
         .on("focusout.#{@ns}", (e) => @validateOne(e.target))
 
     if @config.options.removeHintOnFocus
-      $elements
-        .off("focus.#{@ns}")
+      $elements.off("focus.#{@ns}")
         .on("focus.#{@ns}", (e) => @resetElement(e.target))
 
     if @config.options.validateOnKeyUp
-      $elements
-        .off("keyup.#{@ns}")
+      $elements.off("keyup.#{@ns}")
         .on("keyup.#{@ns}", (e) =>
           @validateOne(e.target) if $(e.target).data('invalid')
         )
 
     if @config.options.validateOnClick
-      $elements
-        .off("click.#{@ns}")
+      $elements.off("click.#{@ns}")
         .on("click.#{@ns}", (e) => @validateOne(e.target))
 
   validate: (context = null) =>
@@ -172,20 +167,16 @@ class @InputValidator
     for name, rule of @config.rules
       unless rule(@, $element, value)
         errors.push {
-          message: $element.data("msg-#{name}") || @messageFor(name)
           element: $element
-          rule: name
+          rule:    name
           value:   value
         }
 
     if errors.length == 0
-      $element.data('invalid', false)
-      @config.handler.onValidIntern(@, $element, value, errors)
+      @onValid($element)
       return true
 
-    $element.data('invalid', true)
-    @config.handler.onInvalidIntern(@, $element, value, errors)
-    $element.first().focus() if @config.options.focusOnInvalid
+    @onInvalid($element, errors)
     errors
 
   reset: (context = null) =>
@@ -193,7 +184,13 @@ class @InputValidator
       @resetElement(element)
 
   resetElement: (element) =>
-    @config.handler.onResetIntern(@, $(element))
+    $element = $(element)
+    @config.handler.onReset?(@, $element)
+
+    $element.removeClass("#{@config.classes.invalid} #{@config.classes.valid}")
+
+    $($element.data('ivalidator-hint')).remove()
+    $element.data('ivalidator-hint', null)
 
   elementsFor: (context = null) =>
     context ?= @context
@@ -201,5 +198,53 @@ class @InputValidator
       .not(@config.selectors.ignore)
 
   messageFor: (name) =>
-    return @config.messages.generic unless @config.messages?[name]
-    @config.messages[name]
+    return @config.messages[name] if @config.messages?[name]
+    @config.messages.generic
+
+  onValid: ($element) =>
+    $element.data('invalid', false)
+            .data('errors',  null)
+            .removeClass(@config.classes.invalid)
+            .addClass(@config.classes.valid)
+
+    @onProcessHints($element, true)
+
+    @config.handler.onValid?(@, $element)
+
+  onInvalid: ($element, errors) =>
+    $element.data('invalid', true)
+            .data('errors', errors)
+            .removeClass(@config.classes.valid)
+            .addClass(@config.classes.invalid)
+
+    @onProcessHints($element, errors)
+
+    @config.handler.onInvalid?(@, $element, errors)
+
+    $element.first().focus() if @config.options.focusOnInvalid
+
+  onProcessHints: ($element, result) =>
+    $oldHint = $element.data('ivalidator-hint')
+    $newHint = null
+
+    if result == true
+      message = @config.handler.onGetValidMessage(@, $element)
+    else
+      message = @config.handler.onGetInvalidMessage(@, $element, result)
+
+    if message
+      $newHint = @config.handler.onBuildHint(@, $element, result, message)
+
+    $element.data('ivalidator-hint', $newHint)
+
+    @config.handler.onShowHint(@, $element, $newHint, $oldHint)
+
+  # url: "Please enter a valid URL.",
+  # date: "Please enter a valid date.",
+  # dateISO: "Please enter a valid date (ISO).",
+  # digits: "Please enter only digits.",
+  # equalTo: "Please enter the same value again.",
+  # rangelength: jQuery.validator.format("Please enter a value between {0} and {1} characters long."),
+  # range: jQuery.validator.format("Please enter a value between {0} and {1}."),
+  # max: jQuery.validator.format("Please enter a value less than or equal to {0}."),
+  # min: jQuery.validator.format("Please enter a value greater than or equal to {0}.")

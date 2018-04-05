@@ -20,11 +20,6 @@
     "bower_components",
     "spec"
   ],
-  "devDependencies": {
-    "jquery-1": "jquery#1.10",
-    "jquery-2": "jquery#2",
-    "jquery-3": "jquery#3"
-  },
   "dependencies": {
     "jquery": ">=1.10.2"
   }

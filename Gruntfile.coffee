@@ -15,7 +15,7 @@ module.exports = (grunt) ->
           'dist/jquery.input.validator.js': 'build/jquery.input.validator.coffee'
 
       specs:
-        options: { sourceMap: true, flatten: false, expand: false }
+        options: { sourceMap: true, inline: true, flatten: false, expand: false }
         files:
           'build/spec/helper.js':             'spec/helper.coffee'
           'build/spec/validation.spec.js':    'spec/validation.spec.coffee'
@@ -78,7 +78,7 @@ module.exports = (grunt) ->
           helpers: 'build/spec/*helper.js'
           vendor: [
             # yes this is ugly, but npm doesnt support multiple versions of a package
-            "bower_components/jquery-1/jquery.min.js"
+            "vendor/jquery-1/jquery.min.js"
             "node_modules/jasmine-jquery/lib/jasmine-jquery.js"
           ]
       jquery2:
@@ -88,7 +88,7 @@ module.exports = (grunt) ->
           helpers: 'build/spec/*helper.js'
           vendor: [
             # yes this is ugly, but npm doesnt support multiple versions of a package
-            "bower_components/jquery-1/jquery.min.js"
+            "vendor/jquery-2/dist/jquery.min.js"
             "node_modules/jasmine-jquery/lib/jasmine-jquery.js"
           ]
       jquery3:
@@ -98,7 +98,7 @@ module.exports = (grunt) ->
           helpers: 'build/spec/*helper.js'
           vendor: [
             # yes this is ugly, but npm doesnt support multiple versions of a package
-            "bower_components/jquery-1/jquery.min.js"
+            "vendor/jquery-3/dist/jquery.min.js"
             "node_modules/jasmine-jquery/lib/jasmine-jquery.js"
           ]
 

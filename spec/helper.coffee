@@ -43,3 +43,20 @@ helper.generateElements = (definitions) ->
 
 helper.printHtml = (element) ->
   console.log $(element).wrapAll('<div>').parent().html()
+
+helper.waitsForAndRuns = (escapeFunction, runFunction, escapeTime=3000) ->
+  interval = setInterval((->
+    if escapeFunction()
+      clearMe()
+      runFunction()
+  ), 100)
+
+  timeOut = setTimeout((->
+    clearMe()
+    runFunction()
+  ), escapeTime)
+
+  clearMe = ->
+    expect('waitsForAndRuns').toBe 'timed out'
+    clearInterval interval
+    clearTimeout timeOut
