@@ -7,3 +7,6 @@ before_script:
   - bower install
 
 script: grunt build --verbose
+
+after_script:
+  - grunt coveralls:default

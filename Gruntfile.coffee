@@ -102,6 +102,22 @@ module.exports = (grunt) ->
             "node_modules/jasmine-jquery/lib/jasmine-jquery.js"
           ]
 
+          template: require 'grunt-template-jasmine-istanbul'
+          templateOptions:
+            coverage: 'coverage/json/coverage.json'
+            report: [
+              {type: 'html', options: {dir: 'coverage/html'}}
+              {type: 'lcov', options: {dir: 'coverage/lcov'}}
+            ]
+
+    coveralls:
+      options:
+        force: false
+
+      default:
+        src: 'coverage/lcov/*.info'
+        options: {}
+
   # Loading dependencies
   require('load-grunt-tasks')(grunt, {
     pattern: ['grunt-*', '!grunt-template-jasmine-istanbul']
