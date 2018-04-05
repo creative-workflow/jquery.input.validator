@@ -13,7 +13,7 @@
       },
       selectors: {
         elements: 'input, textarea, select',
-        ignore: ':hidden'
+        ignore: ':hidden, [readonly]'
       },
       classes: {
         invalid: 'invalid',
@@ -247,10 +247,12 @@
         }
       }
       if (errors.length) {
+        if (this.config.options.focusOnInvalid) {
+          $elements.first().focus();
+        }
         return errors;
-      } else {
-        return true;
       }
+      return true;
     };
 
     InputValidator.prototype.validateOne = function(element) {
@@ -331,12 +333,7 @@
       var base;
       $element.data('invalid', true).data('errors', errors).removeClass(this.config.classes.valid).addClass(this.config.classes.invalid);
       this.onProcessHints($element, errors);
-      if (typeof (base = this.config.handler).onInvalid === "function") {
-        base.onInvalid(this, $element, errors);
-      }
-      if (this.config.options.focusOnInvalid) {
-        return $element.first().focus();
-      }
+      return typeof (base = this.config.handler).onInvalid === "function" ? base.onInvalid(this, $element, errors) : void 0;
     };
 
     InputValidator.prototype.onProcessHints = function($element, result) {
