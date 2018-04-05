@@ -136,14 +136,12 @@
             }
             return;
           }
-          return $oldHint.fadeOut(100, (function(_this) {
-            return function() {
-              if ($newHint) {
-                $newHint.fadeIn(100);
-              }
-              return $oldHint.remove();
-            };
-          })(this));
+          return $oldHint.fadeOut(100, function() {
+            if ($newHint) {
+              $newHint.fadeIn(100);
+            }
+            return $oldHint.remove();
+          });
         },
         onShowHintForTesting: function(validator, $element, $newHint, $oldHint) {
           if ($oldHint == null) {
