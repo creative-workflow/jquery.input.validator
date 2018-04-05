@@ -9,7 +9,7 @@ class @InputValidator
 
     selectors:
       elements: 'input, textarea, select'
-      ignore:   ':hidden'
+      ignore:   ':hidden, [readonly]'
 
     classes:
       invalid: 'invalid'
@@ -157,7 +157,11 @@ class @InputValidator
       result = @validateOne(element)
       errors = errors.concat(result) if result != true
 
-    return if errors.length then errors else true
+    if errors.length
+      $elements.first().focus() if @config.options.focusOnInvalid
+      return errors
+
+    true
 
   validateOne: (element) =>
     $element = $(element)
@@ -220,8 +224,6 @@ class @InputValidator
     @onProcessHints($element, errors)
 
     @config.handler.onInvalid?(@, $element, errors)
-
-    $element.first().focus() if @config.options.focusOnInvalid
 
   onProcessHints: ($element, result) =>
     $oldHint = $element.data('ivalidator-hint')

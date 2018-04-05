@@ -1,5 +1,9 @@
 # Changelog
 
+##### 1.0.13
+  * dont focus invalid if single element is validated
+  * add `[readonly]` to ignored elements
+
 ##### 1.0.12
   * add valid messages
   * remove bower dev dependencies

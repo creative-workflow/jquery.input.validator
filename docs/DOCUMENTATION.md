@@ -96,7 +96,7 @@ options:
 
 selectors:
   elements: 'input, textarea, select'
-  ignore:   ':hidden'
+  ignore:   ':hidden, [readonly]'
 
 classes:
   invalid: 'invalid'

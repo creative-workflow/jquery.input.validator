@@ -17,6 +17,12 @@ describe 'jquery.input.validator', ->
         expect(result.length > 0).toBe true
       )
 
+    it 'validates a set of elements', ->
+      helper.appendAndCallback(helper.invalidElements, ($elements) ->
+        result = validator.validate($elements)
+        expect(result.length).toBe 2
+      )
+
     describe "local pattern", ->
       it 'validates valid', ->
         helper.appendAndCallback(helper.validElements, ($elements) ->
