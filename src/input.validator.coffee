@@ -105,7 +105,7 @@ class @InputValidator
           $newHint.fadeIn() if $newHint
           return
 
-        $oldHint.fadeOut(100, =>
+        $oldHint.fadeOut(100, ->
           $newHint.fadeIn(100) if $newHint
           $oldHint.remove()
         )
@@ -238,13 +238,3 @@ class @InputValidator
     $element.data('ivalidator-hint', $newHint)
 
     @config.handler.onShowHint(@, $element, $newHint, $oldHint)
-
-  # url: "Please enter a valid URL.",
-  # date: "Please enter a valid date.",
-  # dateISO: "Please enter a valid date (ISO).",
-  # digits: "Please enter only digits.",
-  # equalTo: "Please enter the same value again.",
-  # rangelength: jQuery.validator.format("Please enter a value between {0} and {1} characters long."),
-  # range: jQuery.validator.format("Please enter a value between {0} and {1}."),
-  # max: jQuery.validator.format("Please enter a value less than or equal to {0}."),
-  # min: jQuery.validator.format("Please enter a value greater than or equal to {0}.")
