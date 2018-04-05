@@ -1,5 +1,8 @@
 # Changelog
 
+##### 1.0.14
+  * more flexible validation of string defined elements or jquery many result sets
+
 ##### 1.0.13
   * dont focus invalid if single element is validated
   * add `[readonly]` to ignored elements

@@ -118,15 +118,15 @@ class @InputValidator
           $oldHint.remove()
 
   constructor: (@context, config={}) ->
-    @config  = @constructor.config
-    @ns      = 'ivalidator'
+    @config = @constructor.config
+    @init(config, @context)
     @version = '__VERSION__'
-    @init(config)
 
   init: (config, context=null) =>
-    @config = jQuery.extend(true, {}, @config, config) if config
+    @config           = jQuery.extend(true, {}, @config, config) if config
+    @elementsSelector = @config.selectors.elements
+    @ns               = 'ivalidator'
     @prepareElements(context)
-    @config
 
   prepareElements: (context=null) =>
     context ?= @context
@@ -198,12 +198,19 @@ class @InputValidator
 
   elementsFor: (context = null) =>
     context ?= @context
-    $(@config.selectors.elements, context)
+    return $(context) if @isSingle(context)
+    $(@elementsSelector, context)
       .not(@config.selectors.ignore)
 
   messageFor: (name) =>
     return @config.messages[name] if @config.messages?[name]
     @config.messages.generic
+
+  isSingle: (input) =>
+    $(input).is(@elementsSelector)
+
+  shouldBeValidated: (input) =>
+    $(input).is(@elementsSelector) && !$(input).is(@ignoreSelector)
 
   onValid: ($element) =>
     $element.data('invalid', false)
