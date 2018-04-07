@@ -12,7 +12,7 @@ class @InputValidator
       ignore:   ':hidden, [readonly]'
 
     classes:
-      invalid: 'invalid'
+      invalid: 'invalid error'
       valid:   'valid'
       hint:    'ivalidate-hint' # a hint gets also the valid or invalid class
 
@@ -215,6 +215,7 @@ class @InputValidator
   onValid: ($element) =>
     $element.data('invalid', false)
             .data('errors',  null)
+            .attr('aria-invalid', 'false')
             .removeClass(@config.classes.invalid)
             .addClass(@config.classes.valid)
 
@@ -225,6 +226,7 @@ class @InputValidator
   onInvalid: ($element, errors) =>
     $element.data('invalid', true)
             .data('errors', errors)
+            .attr('aria-invalid', 'true')
             .removeClass(@config.classes.valid)
             .addClass(@config.classes.invalid)
 

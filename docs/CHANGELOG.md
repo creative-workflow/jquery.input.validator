@@ -1,5 +1,9 @@
 # Changelog
 
+##### 1.0.15
+  * add class `error` to default error class (next to `invalid`)
+  * handle `aria-invalid` attribute
+
 ##### 1.0.14
   * more flexible validation of string defined elements or jquery many result sets
 
