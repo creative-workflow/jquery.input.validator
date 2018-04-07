@@ -16,7 +16,7 @@
         ignore: ':hidden, [readonly]'
       },
       classes: {
-        invalid: 'invalid',
+        invalid: 'invalid error',
         valid: 'valid',
         hint: 'ivalidate-hint'
       },
@@ -177,7 +177,7 @@
       this.init = bind(this.init, this);
       this.config = this.constructor.config;
       this.init(config, this.context);
-      this.version = '1.0.14';
+      this.version = '1.0.15';
     }
 
     InputValidator.prototype.init = function(config, context) {
@@ -337,14 +337,14 @@
 
     InputValidator.prototype.onValid = function($element) {
       var base;
-      $element.data('invalid', false).data('errors', null).removeClass(this.config.classes.invalid).addClass(this.config.classes.valid);
+      $element.data('invalid', false).data('errors', null).attr('aria-invalid', 'false').removeClass(this.config.classes.invalid).addClass(this.config.classes.valid);
       this.onProcessHints($element, true);
       return typeof (base = this.config.handler).onValid === "function" ? base.onValid(this, $element) : void 0;
     };
 
     InputValidator.prototype.onInvalid = function($element, errors) {
       var base;
-      $element.data('invalid', true).data('errors', errors).removeClass(this.config.classes.valid).addClass(this.config.classes.invalid);
+      $element.data('invalid', true).data('errors', errors).attr('aria-invalid', 'true').removeClass(this.config.classes.valid).addClass(this.config.classes.invalid);
       this.onProcessHints($element, errors);
       return typeof (base = this.config.handler).onInvalid === "function" ? base.onInvalid(this, $element, errors) : void 0;
     };
