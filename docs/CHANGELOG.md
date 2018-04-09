@@ -1,5 +1,8 @@
 # Changelog
 
+##### WIP: 1.0.16
+  * use slideUp/Down to show hide hints
+
 ##### 1.0.15
   * add class `error` to default error class (next to `invalid`)
   * handle `aria-invalid` attribute

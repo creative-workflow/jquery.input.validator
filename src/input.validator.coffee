@@ -97,16 +97,20 @@ class @InputValidator
         }).html(message)
 
       onShowHint: (validator, $element, $newHint, $oldHint = null)  ->
+        if $newHint && $oldHint && $newHint.text() == $oldHint.text()
+          $oldHint.replaceWith($newHint)
+          return
+
         if $newHint
-          $newHint.hide()
+          $newHint.hide().slideUp(1)
           $element.after($newHint)
 
         unless $oldHint
-          $newHint.fadeIn() if $newHint
+          $newHint.stop().slideDown(400) if $newHint
           return
 
-        $oldHint.fadeOut(100, ->
-          $newHint.fadeIn(100) if $newHint
+        $oldHint.stop().slideUp(400, =>
+          $newHint.stop().slideDown(400) if $newHint
           $oldHint.remove()
         )
 
