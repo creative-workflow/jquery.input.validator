@@ -2,6 +2,7 @@
 
 ##### WIP: 1.0.16
   * use slideUp/Down to show hide hints
+  * reorder rules, from specific to generic
   * fix focus frist error
 
 ##### 1.0.15

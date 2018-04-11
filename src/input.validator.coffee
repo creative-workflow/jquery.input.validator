@@ -35,20 +35,6 @@ class @InputValidator
       # coffeelint: enable
 
     rules:
-      minlength: (validator, $element, value) ->
-        return true unless $element.attr('minlength')
-        ('' + value).length >= parseInt($element.attr('minlength'), 10)
-
-      maxlength: (validator, $element, value) ->
-        return true unless $element.attr('maxlength')
-        ('' + value).length <= parseInt($element.attr('maxlength'), 10)
-
-      required: (validator, $element, value) ->
-        return true unless $element.attr('required')
-        return false if value == undefined || value == null
-        return !!value.length if typeof(value) in ['string', 'array' ]
-        !!value
-
       number: (validator, $element, value) ->
         return true if $element.attr('type') != 'number' || !(''+value).length
         validator.config.pattern.number.test(value)
@@ -72,6 +58,21 @@ class @InputValidator
       decimal: (validator, $element, value) ->
         return true unless $element.data('rule-decimal') || !(''+value).length
         validator.config.pattern.decimal.test(value)
+
+      required: (validator, $element, value) ->
+        return true unless $element.attr('required')
+        return false if value == undefined || value == null
+        return !!value.length if typeof(value) in ['string', 'array' ]
+        !!value
+
+      minlength: (validator, $element, value) ->
+        return true unless $element.attr('minlength')
+        ('' + value).length >= parseInt($element.attr('minlength'), 10)
+
+      maxlength: (validator, $element, value) ->
+        return true unless $element.attr('maxlength')
+        ('' + value).length <= parseInt($element.attr('maxlength'), 10)
+
 
     handler:
       onReset:   null # (validator, $element) ->
