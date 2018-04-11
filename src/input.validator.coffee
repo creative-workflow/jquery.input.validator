@@ -161,11 +161,16 @@ class @InputValidator
       result = @validateOne(element)
       errors = errors.concat(result) if result != true
 
-    if errors.length
-      $elements.first().focus() if @config.options.focusOnInvalid
-      return errors
+    return true unless errors.length
 
-    true
+    if @config.options.focusOnInvalid
+      $elements.filter( (index, element) =>
+        $(element).hasClass(@config.classes.invalid)
+      ).first().focus()
+
+    return errors
+
+
 
   validateOne: (element) =>
     $element = $(element)

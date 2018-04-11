@@ -2,6 +2,7 @@
 
 ##### WIP: 1.0.16
   * use slideUp/Down to show hide hints
+  * fix focus frist error
 
 ##### 1.0.15
   * add class `error` to default error class (next to `invalid`)
