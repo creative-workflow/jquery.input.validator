@@ -61,7 +61,7 @@ describe 'jquery.input.validator', ->
 
     it 'changes the message', ->
       elements = [
-        {type: 'email', value:'ab', 'minlength': 3}
+        {type: 'email', value:'ab', 'minlength': 10}
       ]
 
       helper.appendAndCallback(elements, ($elements) =>
@@ -70,13 +70,13 @@ describe 'jquery.input.validator', ->
         validator.validateOne($element)
 
         $label = $(hintSelector, $elements)
-        expect($label.text()).toBe validator.config.messages.minlength
+        expect($label.text()).toBe validator.config.messages.email
 
-        $element.val('not more minlength')
+        $element.val('a@b.de')
         validator.validateOne($element)
 
         $label = $(hintSelector, $elements)
-        expect($label.text()).toBe validator.config.messages.email
+        expect($label.text()).toBe validator.config.messages.minlength
       )
 
     it 'show valid message', ->
