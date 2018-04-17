@@ -37,31 +37,6 @@
         email: /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
       },
       rules: {
-        minlength: function(validator, $element, value) {
-          if (!$element.attr('minlength')) {
-            return true;
-          }
-          return ('' + value).length >= parseInt($element.attr('minlength'), 10);
-        },
-        maxlength: function(validator, $element, value) {
-          if (!$element.attr('maxlength')) {
-            return true;
-          }
-          return ('' + value).length <= parseInt($element.attr('maxlength'), 10);
-        },
-        required: function(validator, $element, value) {
-          var ref;
-          if (!$element.attr('required')) {
-            return true;
-          }
-          if (value === void 0 || value === null) {
-            return false;
-          }
-          if ((ref = typeof value) === 'string' || ref === 'array') {
-            return !!value.length;
-          }
-          return !!value;
-        },
         number: function(validator, $element, value) {
           if ($element.attr('type') !== 'number' || !('' + value).length) {
             return true;
@@ -97,6 +72,31 @@
             return true;
           }
           return validator.config.pattern.decimal.test(value);
+        },
+        required: function(validator, $element, value) {
+          var ref;
+          if (!$element.attr('required')) {
+            return true;
+          }
+          if (value === void 0 || value === null) {
+            return false;
+          }
+          if ((ref = typeof value) === 'string' || ref === 'array') {
+            return !!value.length;
+          }
+          return !!value;
+        },
+        minlength: function(validator, $element, value) {
+          if (!$element.attr('minlength')) {
+            return true;
+          }
+          return ('' + value).length >= parseInt($element.attr('minlength'), 10);
+        },
+        maxlength: function(validator, $element, value) {
+          if (!$element.attr('maxlength')) {
+            return true;
+          }
+          return ('' + value).length <= parseInt($element.attr('maxlength'), 10);
         }
       },
       handler: {
@@ -126,19 +126,23 @@
           if ($oldHint == null) {
             $oldHint = null;
           }
+          if ($newHint && $oldHint && $newHint.text() === $oldHint.text()) {
+            $oldHint.replaceWith($newHint);
+            return;
+          }
           if ($newHint) {
-            $newHint.hide();
+            $newHint.hide().slideUp(1);
             $element.after($newHint);
           }
           if (!$oldHint) {
             if ($newHint) {
-              $newHint.fadeIn();
+              $newHint.stop().slideDown(400);
             }
             return;
           }
-          return $oldHint.fadeOut(100, function() {
+          return $oldHint.stop().slideUp(400, function() {
             if ($newHint) {
-              $newHint.fadeIn(100);
+              $newHint.stop().slideDown(400);
             }
             return $oldHint.remove();
           });
@@ -177,7 +181,7 @@
       this.init = bind(this.init, this);
       this.config = this.constructor.config;
       this.init(config, this.context);
-      this.version = '1.0.15';
+      this.version = '1.0.16';
     }
 
     InputValidator.prototype.init = function(config, context) {
@@ -248,13 +252,17 @@
           errors = errors.concat(result);
         }
       }
-      if (errors.length) {
-        if (this.config.options.focusOnInvalid) {
-          $elements.first().focus();
-        }
-        return errors;
+      if (!errors.length) {
+        return true;
       }
-      return true;
+      if (this.config.options.focusOnInvalid) {
+        $elements.filter((function(_this) {
+          return function(index, element) {
+            return $(element).hasClass(_this.config.classes.invalid);
+          };
+        })(this)).first().focus();
+      }
+      return errors;
     };
 
     InputValidator.prototype.validateOne = function(element) {
