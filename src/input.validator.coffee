@@ -110,7 +110,7 @@ class @InputValidator
           $newHint.stop().slideDown(400) if $newHint
           return
 
-        $oldHint.stop().slideUp(400, =>
+        $oldHint.stop().slideUp(400, ->
           $newHint.stop().slideDown(400) if $newHint
           $oldHint.remove()
         )
