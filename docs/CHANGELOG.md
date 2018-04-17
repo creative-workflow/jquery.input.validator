@@ -1,6 +1,6 @@
 # Changelog
 
-##### WIP: 1.0.16
+##### 1.0.16
   * use slideUp/Down to show hide hints
   * reorder rules, from specific to generic
   * fix focus frist error
