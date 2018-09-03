@@ -9,6 +9,8 @@
         validateOnKeyUp: true,
         validateOnClick: false,
         focusOnInvalid: true,
+        scrollToOnInvalid: true,
+        scrollToOnInvalidOffset: 80,
         removeHintOnFocus: false
       },
       selectors: {
@@ -181,7 +183,7 @@
       this.init = bind(this.init, this);
       this.config = this.constructor.config;
       this.init(config, this.context);
-      this.version = '1.0.16';
+      this.version = '1.0.17';
     }
 
     InputValidator.prototype.init = function(config, context) {
@@ -238,7 +240,7 @@
     };
 
     InputValidator.prototype.validate = function(context) {
-      var $elements, element, errors, i, len, ref, result;
+      var $element, $elements, element, errors, i, len, offset, ref, result;
       if (context == null) {
         context = null;
       }
@@ -256,11 +258,18 @@
         return true;
       }
       if (this.config.options.focusOnInvalid) {
-        $elements.filter((function(_this) {
+        $element = $elements.filter((function(_this) {
           return function(index, element) {
             return $(element).hasClass(_this.config.classes.invalid);
           };
-        })(this)).first().focus();
+        })(this)).first();
+        $element.focus();
+        if (this.config.options.scrollToOnInvalid) {
+          offset = this.config.options.scrollToOnInvalidOffset;
+          $('html, body').stop().animate({
+            'scrollTop': $element.offset().top - offset
+          });
+        }
       }
       return errors;
     };
