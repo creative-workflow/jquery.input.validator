@@ -5,6 +5,8 @@ class @InputValidator
       validateOnKeyUp:    true    # validates only on key up when invalid before
       validateOnClick:    false
       focusOnInvalid:     true
+      scrollToOnInvalid:  true
+      scrollToOnInvalidOffset: 80
       removeHintOnFocus:  false
 
     selectors:
@@ -165,13 +167,18 @@ class @InputValidator
     return true unless errors.length
 
     if @config.options.focusOnInvalid
-      $elements.filter( (index, element) =>
+      $element = $elements.filter( (index, element) =>
         $(element).hasClass(@config.classes.invalid)
-      ).first().focus()
+      ).first()
+
+      $element.focus()
+      if @config.options.scrollToOnInvalid
+        offset = @config.options.scrollToOnInvalidOffset
+        $('html, body').stop().animate({
+          'scrollTop': $element.offset().top - offset
+        })
 
     return errors
-
-
 
   validateOne: (element) =>
     $element = $(element)

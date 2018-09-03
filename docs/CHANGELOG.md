@@ -1,5 +1,8 @@
 # Changelog
 
+##### 1.0.17
+  * add `scrollToOnInvalid` and `scrollToOnInvalidOffset` for circumvent ios focus restrictions
+  
 ##### 1.0.16
   * use slideUp/Down to show hide hints
   * reorder rules, from specific to generic

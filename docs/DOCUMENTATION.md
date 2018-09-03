@@ -92,6 +92,8 @@ options:
   validateOnKeyUp:    true    # validates only on key up when invalid before
   validateOnClick:    false
   focusOnInvalid:     true
+  scrollToOnInvalid:  true
+  scrollToOnInvalidOffset: 80
   removeHintOnFocus:  false
 
 selectors:
