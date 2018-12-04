@@ -36,7 +36,7 @@
         decimal: /^[\d\.]*$/,
         number: /^\d*$/,
         tel: /^[0-9\/\-\+\s\(\)]*$/,
-        email: /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/
+        email: /^\s*([\w\.!#\$%&\'\*\+-\/=\?\^`\{\|\}~]+)@([a-zA-Z0-9\-]{2,63}\..+)\s*$/
       },
       rules: {
         number: function(validator, $element, value) {
@@ -183,7 +183,7 @@
       this.init = bind(this.init, this);
       this.config = this.constructor.config;
       this.init(config, this.context);
-      this.version = '1.0.18';
+      this.version = '1.0.19';
     }
 
     InputValidator.prototype.init = function(config, context) {
