@@ -181,9 +181,12 @@ class @InputValidator
     return errors
 
   validateOne: (element) =>
-    $element = $(element)
-    value    = $element.val()
     errors   = []
+    $element = $(element)
+    if $element.attr('type') == 'checkbox'
+      value = if $element.is(":checked") then $element.val() else null
+    else
+      value    = $element.val()
 
     for name, rule of @config.rules
       unless rule(@, $element, value)

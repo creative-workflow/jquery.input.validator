@@ -183,7 +183,7 @@
       this.init = bind(this.init, this);
       this.config = this.constructor.config;
       this.init(config, this.context);
-      this.version = '1.0.19';
+      this.version = '1.0.20';
     }
 
     InputValidator.prototype.init = function(config, context) {
@@ -276,9 +276,13 @@
 
     InputValidator.prototype.validateOne = function(element) {
       var $element, errors, name, ref, rule, value;
-      $element = $(element);
-      value = $element.val();
       errors = [];
+      $element = $(element);
+      if ($element.attr('type') === 'checkbox') {
+        value = $element.is(":checked") ? $element.val() : null;
+      } else {
+        value = $element.val();
+      }
       ref = this.config.rules;
       for (name in ref) {
         rule = ref[name];

@@ -1,8 +1,11 @@
 # Changelog
 
+##### 1.0.20
+  * fix validating checkboxes
+
 ##### 1.0.19
   * better email regexp
-  
+
 ##### 1.0.17
   * add `scrollToOnInvalid` and `scrollToOnInvalidOffset` for circumvent ios focus restrictions
 
