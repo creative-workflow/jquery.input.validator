@@ -1,5 +1,8 @@
 # Changelog
 
+##### 1.0.21
+  * better email regexp
+
 ##### 1.0.20
   * fix validating checkboxes
 
