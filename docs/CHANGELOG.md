@@ -1,5 +1,8 @@
 # Changelog
 
+##### 1.1.0
+  * allow email regexp to macth two char local domains and host subdomains
+
 ##### 1.0.21
   * better email regexp
 
