@@ -30,7 +30,8 @@
         minlength: 'to short',
         maxlength: 'to long',
         required: 'required',
-        hasClass: 'missing class'
+        hasClass: 'missing class',
+        equal: 'unequal'
       },
       pattern: {
         decimal: /^[\d\.]*$/,
@@ -99,6 +100,12 @@
             return true;
           }
           return ('' + value).length <= parseInt($element.attr('maxlength'), 10);
+        },
+        equal: function(validator, $element, value, context) {
+          if (!$element.data('rule-is-equal-to')) {
+            return true;
+          }
+          return value === $($element.data('rule-is-equal-to'), context).val();
         }
       },
       handler: {
@@ -183,7 +190,7 @@
       this.init = bind(this.init, this);
       this.config = this.constructor.config;
       this.init(config, this.context);
-      this.version = '1.0.21';
+      this.version = '1.1.1';
     }
 
     InputValidator.prototype.init = function(config, context) {
@@ -249,7 +256,7 @@
       ref = $elements.get();
       for (i = 0, len = ref.length; i < len; i++) {
         element = ref[i];
-        result = this.validateOne(element);
+        result = this.validateOne(element, context);
         if (result !== true) {
           errors = errors.concat(result);
         }
@@ -274,8 +281,11 @@
       return errors;
     };
 
-    InputValidator.prototype.validateOne = function(element) {
+    InputValidator.prototype.validateOne = function(element, context) {
       var $element, errors, name, ref, rule, value;
+      if (context == null) {
+        context = this.context;
+      }
       errors = [];
       $element = $(element);
       if ($element.attr('type') === 'checkbox') {
@@ -286,7 +296,7 @@
       ref = this.config.rules;
       for (name in ref) {
         rule = ref[name];
-        if (!rule(this, $element, value)) {
+        if (!rule(this, $element, value, context)) {
           errors.push({
             element: $element,
             rule: name,
