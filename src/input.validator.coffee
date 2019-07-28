@@ -27,6 +27,7 @@ class @InputValidator
       maxlength: 'to long'
       required:  'required'
       hasClass:  'missing class'
+      equal:     'unequal'
 
     pattern:
       decimal: /^[\d\.]*$/
@@ -74,6 +75,10 @@ class @InputValidator
       maxlength: (validator, $element, value) ->
         return true unless $element.attr('maxlength')
         ('' + value).length <= parseInt($element.attr('maxlength'), 10)
+
+      equal: (validator, $element, value, context) ->
+        return true unless $element.data('rule-is-equal-to')
+        value == $($element.data('rule-is-equal-to'), context).val()
 
 
     handler:

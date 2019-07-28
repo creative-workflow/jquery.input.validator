@@ -155,3 +155,34 @@ describe 'jquery.input.validator', ->
           helper.expectInValid generateAndValidate(
             { type: 'text', value: '12g', 'data-rule-decimal': true}
           )
+
+      describe "equal", ->
+        it 'fails with unequal input', ->
+          p1 = helper.generateElement(
+            {type: 'password', value: 42, required: true, class: 'password1'}
+          )
+          p2 = helper.generateElement(
+            {type: 'password', value: 41, required: true, class: 'password2', 'data-rule-is-equal-to':'.password1'}
+          )
+
+          div = $('<div\>').append($('<div\>').append(p1).append(p2))
+
+          equalValidator = new InputValidator(div, {})
+          helper.expectInValid(
+            equalValidator.validateOne(p2, div)
+          )
+
+        it 'succeeds with equal input', ->
+          p1 = helper.generateElement(
+            {type: 'password', value: 42, required: true, class: 'password1'}
+          )
+          p2 = helper.generateElement(
+            {type: 'password', value: 42, required: true, class: 'password2', 'data-rule-is-equal-to':'.password1'}
+          )
+
+          div = $('<div\>').append($('<div\>').append(p1).append(p2))
+
+          equalValidator = new InputValidator(div, {})
+          helper.expectValid(
+            equalValidator.validateOne(p2, div)
+          )
