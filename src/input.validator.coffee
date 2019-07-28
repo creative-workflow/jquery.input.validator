@@ -161,7 +161,7 @@ class @InputValidator
     errors = []
     $elements = @elementsFor(context)
     for element in $elements.get()
-      result = @validateOne(element)
+      result = @validateOne(element, context)
       errors = errors.concat(result) if result != true
 
     return true unless errors.length
@@ -180,7 +180,8 @@ class @InputValidator
 
     return errors
 
-  validateOne: (element) =>
+  validateOne: (element, context) =>
+    context ?= @context
     errors   = []
     $element = $(element)
     if $element.attr('type') == 'checkbox'
@@ -189,7 +190,7 @@ class @InputValidator
       value    = $element.val()
 
     for name, rule of @config.rules
-      unless rule(@, $element, value)
+      unless rule(@, $element, value, context)
         errors.push {
           element: $element
           rule:    name
