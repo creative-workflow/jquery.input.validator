@@ -289,7 +289,8 @@
       errors = [];
       $element = $(element);
       if ((ref = $element.attr('type')) === 'checkbox' || ref === 'radio') {
-        value = $element.is(":checked") ? $element.val() : null;
+        name = $element.attr('name');
+        value = $("[name='" + name + "']:checked", context).val();
       } else {
         value = $element.val();
       }
