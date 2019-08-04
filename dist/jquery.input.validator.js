@@ -190,7 +190,7 @@
       this.init = bind(this.init, this);
       this.config = this.constructor.config;
       this.init(config, this.context);
-      this.version = '1.1.3';
+      this.version = '1.1.4';
     }
 
     InputValidator.prototype.init = function(config, context) {
