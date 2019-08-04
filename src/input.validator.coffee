@@ -189,7 +189,7 @@ class @InputValidator
     context ?= @context
     errors   = []
     $element = $(element)
-    if $element.attr('type') == 'checkbox'
+    if $element.attr('type') in ['checkbox', 'radio']
       value = if $element.is(":checked") then $element.val() else null
     else
       value    = $element.val()
