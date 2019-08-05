@@ -141,7 +141,11 @@
           }
           if ($newHint) {
             $newHint.hide().slideUp(1);
-            $element.after($newHint);
+            if ($element.data('ivalidator-attach-hint-to')) {
+              $($element.data('ivalidator-attach-hint-to')).append($newHint);
+            } else {
+              $element.after($newHint);
+            }
           }
           if (!$oldHint) {
             if ($newHint) {
@@ -190,7 +194,7 @@
       this.init = bind(this.init, this);
       this.config = this.constructor.config;
       this.init(config, this.context);
-      this.version = '1.1.6';
+      this.version = '1.1.7';
     }
 
     InputValidator.prototype.init = function(config, context) {
