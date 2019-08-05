@@ -1,11 +1,14 @@
 # Changelog
 
+##### 1.1.3
+  * attach error hint to custom element by data attribute `ivalidator-attach-hint-to`.
+
 ##### 1.1.2
   * correct value detection for radio
 
 ##### 1.1.1
   * add equal validator for password repeat for ex.
-  
+
 ##### 1.1.0
   * allow email regexp to macth two char local domains and host subdomains
 

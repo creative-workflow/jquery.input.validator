@@ -19,6 +19,10 @@ validator.validateOne('<input type="text" data-has-class="hello" class="hello">'
 
 // add a custom message for an validator
 validator.validateOne('<input type="text" required data-msg-required="required!">')
+
+// attach error hint to custom element
+validator.validateOne('<input type="text" ivalidator-attach-hint-to=".my-selector" required data-msg-required="required!">')
+
 ```
 
 ##### Custom valiators
@@ -246,7 +250,10 @@ Have a look at the current implementation:
 
 ```
 
-I think there is potential to implement this more elegant: [Contributing](CONTRIBUTING.md) =)
+
+
+### Contribute
+[Contributing](CONTRIBUTING.md) =)
 
 ### Resources
   * [Readme](../README.md)
