@@ -111,7 +111,10 @@ class @InputValidator
 
         if $newHint
           $newHint.hide().slideUp(1)
-          $element.after($newHint)
+          if $element.data('ivalidator-attach-hint-to')
+            $($element.data('ivalidator-attach-hint-to')).append($newHint)
+          else
+            $element.after($newHint)
 
         unless $oldHint
           $newHint.stop().slideDown(400) if $newHint
