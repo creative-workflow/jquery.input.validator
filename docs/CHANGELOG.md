@@ -1,6 +1,6 @@
 # Changelog
 
-##### 1.1.7
+##### 1.1.8
   * fix required for radios
 
 ##### 1.1.3
