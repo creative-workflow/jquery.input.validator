@@ -1,5 +1,8 @@
 # Changelog
 
+##### 1.1.7
+  * fix required for radios
+
 ##### 1.1.3
   * attach error hint to custom element by data attribute `ivalidator-attach-hint-to`.
 
