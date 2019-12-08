@@ -11,7 +11,7 @@ class @InputValidator
 
     selectors:
       elements: 'input, textarea, select'
-      ignore:   ':hidden, [readonly]'
+      ignore:   ':hidden:not(.force-validate), [readonly]:not(.force-validate)'
 
     classes:
       invalid: 'invalid error'
