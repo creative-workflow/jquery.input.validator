@@ -12,7 +12,7 @@
   "readmeFilename": "README.md",
   "devDependencies": {
     "coffeelint": "^1.16.0",
-    "grunt": "^1.0.3",
+    "grunt": "^1.0.4",
     "grunt-coffeelint": "0.0.16",
     "grunt-contrib-clean": "^1.1.0",
     "grunt-contrib-coffee": "^1.0.0",
@@ -28,8 +28,8 @@
     "load-grunt-tasks": "^3.5.2"
   },
   "dependencies": {
-    "jquery": ">=1.10",
-    "npm": "^5.8.0"
+    "jquery": "^3.4.1",
+    "npm": "^6.13.4"
   },
   "scripts": {
     "test": "grunt test",
