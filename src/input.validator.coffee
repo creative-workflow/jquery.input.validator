@@ -147,7 +147,7 @@ class @InputValidator
     ret = ''
     x = 0
     while x < input.length
-      if input.charCodeAt(x) >= 33 and input.charCodeAt(x) <= 253
+      if input.charCodeAt(x) >= 32 and input.charCodeAt(x) <= 255
         ret += input.charAt(x)
       x++
     ret

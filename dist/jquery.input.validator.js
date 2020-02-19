@@ -194,7 +194,7 @@
       this.init = bind(this.init, this);
       this.config = this.constructor.config;
       this.init(config, this.context);
-      this.version = '1.1.9';
+      this.version = '1.1.10';
     }
 
     InputValidator.prototype.init = function(config, context) {
@@ -214,7 +214,7 @@
       ret = '';
       x = 0;
       while (x < input.length) {
-        if (input.charCodeAt(x) >= 33 && input.charCodeAt(x) <= 253) {
+        if (input.charCodeAt(x) >= 32 && input.charCodeAt(x) <= 253) {
           ret += input.charAt(x);
         }
         x++;
