@@ -214,7 +214,7 @@
       ret = '';
       x = 0;
       while (x < input.length) {
-        if (input.charCodeAt(x) >= 32 && input.charCodeAt(x) <= 253) {
+        if (input.charCodeAt(x) >= 32 && input.charCodeAt(x) <= 255) {
           ret += input.charAt(x);
         }
         x++;
