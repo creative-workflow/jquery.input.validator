@@ -191,7 +191,6 @@
       this.validateOne = bind(this.validateOne, this);
       this.validate = bind(this.validate, this);
       this.prepareElements = bind(this.prepareElements, this);
-      this.strip = bind(this.strip, this);
       this.init = bind(this.init, this);
       this.config = this.constructor.config;
       this.init(config, this.context);
