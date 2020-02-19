@@ -40,15 +40,15 @@ class @InputValidator
     rules:
       number: (validator, $element, value) ->
         return true if $element.attr('type') != 'number' || !(''+value).length
-        validator.config.pattern.number.test(value)
+        validator.config.pattern.number.test(validator.strip(value))
 
       tel: (validator, $element, value) ->
         return true if $element.attr('type') != 'tel' || !(''+value).length
-        validator.config.pattern.tel.test(value)
+        validator.config.pattern.tel.test(validator.strip(value))
 
       email: (validator, $element, value) ->
         return true if $element.attr('type') != 'email' || !(''+value).length
-        validator.config.pattern.email.test(value)
+        validator.config.pattern.email.test(validator.strip(value))
 
       pattern: (validator, $element, value) ->
         return true if !$element.attr('pattern') || !(''+value).length
@@ -60,7 +60,7 @@ class @InputValidator
 
       decimal: (validator, $element, value) ->
         return true unless $element.data('rule-decimal') || !(''+value).length
-        validator.config.pattern.decimal.test(value)
+        validator.config.pattern.decimal.test(validator.strip(value))
 
       required: (validator, $element, value) ->
         return true unless $element.attr('required')
@@ -142,6 +142,15 @@ class @InputValidator
     @elementsSelector = @config.selectors.elements
     @ns               = 'ivalidator'
     @prepareElements(context)
+
+  strip: (input) ->
+    ret = ''
+    x = 0
+    while x < input.length
+      if input.charCodeAt(x) >= 33 and input.charCodeAt(x) <= 253
+        ret += input.charAt(x)
+      x++
+    ret
 
   prepareElements: (context=null) =>
     context ?= @context

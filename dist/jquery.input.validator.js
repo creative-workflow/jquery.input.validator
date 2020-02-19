@@ -15,7 +15,7 @@
       },
       selectors: {
         elements: 'input, textarea, select',
-        ignore: ':hidden, [readonly]'
+        ignore: ':hidden:not(.force-validate), [readonly]:not(.force-validate)'
       },
       classes: {
         invalid: 'invalid error',
@@ -44,19 +44,19 @@
           if ($element.attr('type') !== 'number' || !('' + value).length) {
             return true;
           }
-          return validator.config.pattern.number.test(value);
+          return validator.config.pattern.number.test(validator.strip(value));
         },
         tel: function(validator, $element, value) {
           if ($element.attr('type') !== 'tel' || !('' + value).length) {
             return true;
           }
-          return validator.config.pattern.tel.test(value);
+          return validator.config.pattern.tel.test(validator.strip(value));
         },
         email: function(validator, $element, value) {
           if ($element.attr('type') !== 'email' || !('' + value).length) {
             return true;
           }
-          return validator.config.pattern.email.test(value);
+          return validator.config.pattern.email.test(validator.strip(value));
         },
         pattern: function(validator, $element, value) {
           if (!$element.attr('pattern') || !('' + value).length) {
@@ -74,7 +74,7 @@
           if (!($element.data('rule-decimal') || !('' + value).length)) {
             return true;
           }
-          return validator.config.pattern.decimal.test(value);
+          return validator.config.pattern.decimal.test(validator.strip(value));
         },
         required: function(validator, $element, value) {
           var ref;
@@ -191,10 +191,11 @@
       this.validateOne = bind(this.validateOne, this);
       this.validate = bind(this.validate, this);
       this.prepareElements = bind(this.prepareElements, this);
+      this.strip = bind(this.strip, this);
       this.init = bind(this.init, this);
       this.config = this.constructor.config;
       this.init(config, this.context);
-      this.version = '1.1.8';
+      this.version = '1.1.9';
     }
 
     InputValidator.prototype.init = function(config, context) {
@@ -207,6 +208,19 @@
       this.elementsSelector = this.config.selectors.elements;
       this.ns = 'ivalidator';
       return this.prepareElements(context);
+    };
+
+    InputValidator.prototype.strip = function(input) {
+      var ret, x;
+      ret = '';
+      x = 0;
+      while (x < input.length) {
+        if (input.charCodeAt(x) >= 33 && input.charCodeAt(x) <= 253) {
+          ret += input.charAt(x);
+        }
+        x++;
+      }
+      return ret;
     };
 
     InputValidator.prototype.prepareElements = function(context) {

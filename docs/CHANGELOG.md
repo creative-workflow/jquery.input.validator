@@ -1,5 +1,8 @@
 # Changelog
 
+##### 1.1.9
+  * strip non printable chars before validationg email, tel and numbers
+
 ##### 1.1.8
   * fix required for radios
 
