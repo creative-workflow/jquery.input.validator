@@ -29,6 +29,8 @@
         number: 'invalid number',
         minlength: 'to short',
         maxlength: 'to long',
+        min: 'number to low',
+        max: 'number to high',
         required: 'required',
         hasClass: 'missing class',
         equal: 'unequal'
@@ -100,6 +102,18 @@
             return true;
           }
           return ('' + value).length <= parseInt($element.attr('maxlength'), 10);
+        },
+        min: function(validator, $element, value) {
+          if (!$element.attr('min')) {
+            return true;
+          }
+          return parseInt(value, 10) >= parseInt($element.attr('min'), 10);
+        },
+        max: function(validator, $element, value) {
+          if (!$element.attr('max')) {
+            return true;
+          }
+          return parseInt(value || 0, 10) <= parseInt($element.attr('max'), 10);
         },
         equal: function(validator, $element, value, context) {
           if (!$element.data('rule-is-equal-to')) {
@@ -194,7 +208,7 @@
       this.init = bind(this.init, this);
       this.config = this.constructor.config;
       this.init(config, this.context);
-      this.version = '1.1.10';
+      this.version = '1.1.11';
     }
 
     InputValidator.prototype.init = function(config, context) {
