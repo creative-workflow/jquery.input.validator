@@ -25,6 +25,8 @@ class @InputValidator
       number:    'invalid number'
       minlength: 'to short'
       maxlength: 'to long'
+      min:       'number to low'
+      max:       'number to high'
       required:  'required'
       hasClass:  'missing class'
       equal:     'unequal'
@@ -75,6 +77,14 @@ class @InputValidator
       maxlength: (validator, $element, value) ->
         return true unless $element.attr('maxlength')
         ('' + value).length <= parseInt($element.attr('maxlength'), 10)
+
+      min: (validator, $element, value) ->
+        return true unless $element.attr('min')
+        parseInt(value, 10) >= parseInt($element.attr('min'), 10)
+
+      max: (validator, $element, value) ->
+        return true unless $element.attr('max')
+        parseInt(value || 0, 10)<= parseInt($element.attr('max'), 10)
 
       equal: (validator, $element, value, context) ->
         return true unless $element.data('rule-is-equal-to')

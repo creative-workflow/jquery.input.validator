@@ -1,5 +1,8 @@
 # Changelog
 
+##### 1.1.11
+  * add min and max validators for numbers
+  
 ##### 1.1.10
   * dont strip whitespaces
 

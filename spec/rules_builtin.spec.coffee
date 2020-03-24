@@ -54,6 +54,45 @@ describe 'jquery.input.validator', ->
             { type: 'number', value: '12' }
           )
 
+        describe "max", ->
+          it 'succeeds with empty input', ->
+            helper.expectValid generateAndValidate(
+              { type: 'number', max: '12' }
+            )
+
+          it 'succeeds with valid input', ->
+            helper.expectValid generateAndValidate(
+              { type: 'number', value: '12', max: '12' }
+            )
+
+            helper.expectValid generateAndValidate(
+              { type: 'number', value: '12', max: '13' }
+            )
+
+          it 'fails with invalid input', ->
+            helper.expectInValid generateAndValidate(
+              { type: 'number', value: '13', max: '12' }
+            )
+
+        describe "min", ->
+          it 'fails with empty input', ->
+            helper.expectInValid generateAndValidate(
+              { type: 'number', min: '3' }
+            )
+
+          it 'succeeds with valid input', ->
+            helper.expectValid generateAndValidate(
+              { type: 'number', value: '12', min: '12' }
+            )
+            helper.expectValid generateAndValidate(
+              { type: 'number', value: '12', min: '11' }
+            )
+
+          it 'fails with invalid input', ->
+            helper.expectInValid generateAndValidate(
+              { type: 'number', value: '11', min: '12' }
+            )
+
         # some browser passing empty string when invalid input for type number
         # it 'fails with invalid input', ->
         #
